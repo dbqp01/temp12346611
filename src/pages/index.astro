@@ -1,0 +1,272 @@
+---
+import '../styles/global.css';
+
+const sources = [
+  {
+    number: '01',
+    name: 'Hackmetrix',
+    year: '2025',
+    title: 'El impacto de los ciberataques en universidades de Latinoamérica.',
+    role: 'Contexto regional',
+    url: 'https://blog.hackmetrix.com/ciberataques-en-universidades-de-latinoamerica'
+  },
+  {
+    number: '02',
+    name: 'Microsoft',
+    year: '2024',
+    title: 'Cyber Signals 08: educación bajo asedio.',
+    role: 'Frecuencia de ataques',
+    url: 'https://news.microsoft.com/source/latam/noticias-de-microsoft/cyber-signals-edicion-8-educacion-bajo-asedio-como-los-ciberdelincuentes-atacan-nuestras-escuelas'
+  },
+  {
+    number: '03',
+    name: 'TÜV Rheinland',
+    year: '2024',
+    title: 'ISO 27001 Audit: Complete Guide.',
+    role: 'Método de auditoría',
+    url: 'https://www.tuv.com/press/en/press-releases/iso-27001-audit-complete-guide.html'
+  },
+  {
+    number: '04',
+    name: 'Acurio et al.',
+    year: '2024',
+    title: 'Evaluación de controles de seguridad a través de auditorías informáticas.',
+    role: 'Sustento académico',
+    url: 'https://journalprosciences.com/index.php/ps/article/view/751'
+  }
+];
+
+const risks = [
+  { label: 'Accesos', value: '07', detail: 'roles sin revisar' },
+  { label: 'Credenciales', value: '43%', detail: 'universidades con brechas semanales' },
+  { label: 'Respuesta', value: '24/7', detail: 'la alerta no espera' }
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Ensayo visual sobre auditoría de seguridad informática en sistemas académicos universitarios." />
+    <meta name="theme-color" content="#121211" />
+    <title>Superficie de ataque — Auditoría académica</title>
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark">UCV</span>
+        <span class="brand-copy">Sistema<br />de lectura</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="#articulo">Artículo</a>
+        <a href="#tesis">Tesis</a>
+        <a href="#fuentes">Fuentes</a>
+      </nav>
+
+      <div class="header-meta">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>Edición 01 / 2026-II</span>
+      </div>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <span>Menú</span>
+        <span class="menu-icon" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <a href="#articulo">Artículo</a>
+      <a href="#tesis">Tesis</a>
+      <a href="#fuentes">Fuentes</a>
+    </div>
+
+    <main id="inicio">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-layout">
+          <div class="hero-copy reveal">
+            <p class="eyebrow"><span class="eyebrow-line"></span> Auditoría / seguridad de la información</p>
+            <h1 id="hero-title">La universidad también es una <em>superficie de ataque.</em></h1>
+            <p class="hero-intro">Una lectura sobre los accesos, las fallas y los controles mínimos que mantienen en pie a un sistema académico.</p>
+            <div class="hero-actions">
+              <a class="button-primary" href="#articulo">Abrir investigación <span aria-hidden="true">↗</span></a>
+              <a class="text-link text-link-light" href="#fuentes">Ver las fuentes <span aria-hidden="true">↓</span></a>
+            </div>
+            <dl class="hero-meta">
+              <div><dt>Autor</dt><dd>Antonio Mena · Akim Felipe</dd></div>
+              <div><dt>Curso</dt><dd>Habilidades comunicativas</dd></div>
+              <div><dt>Ubicación</dt><dd>Cusco, Perú</dd></div>
+            </dl>
+          </div>
+
+          <div class="hero-visual reveal reveal-delay" aria-label="Visual abstracto de un sistema académico auditado">
+            <div class="visual-topline"><span>SYS / 01</span><span>STATUS: EXPOSED</span></div>
+            <div class="visual-ruler ruler-left"><span>00</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+            <div class="visual-ruler ruler-bottom"><span>AUTH</span><span>DATA</span><span>ACCESS</span><span>TRACE</span></div>
+            <div class="visual-orbit orbit-one"></div>
+            <div class="visual-orbit orbit-two"></div>
+            <div class="visual-crosshair crosshair-one"></div>
+            <div class="visual-crosshair crosshair-two"></div>
+            <div class="visual-core">
+              <span class="core-label">AUDIT LOG</span>
+              <strong>RISK<br /><i>MAP</i></strong>
+              <span class="core-status"><b></b> scanning / live</span>
+            </div>
+            <div class="visual-callout callout-top"><span>01</span><strong>access</strong><small>unmapped</small></div>
+            <div class="visual-callout callout-bottom"><span>04</span><strong>recovery</strong><small>unplanned</small></div>
+            <div class="visual-footer"><span>LAT -13.5319 / LON -71.9675</span><span>UCV VIRTUAL</span></div>
+          </div>
+        </div>
+
+        <div class="hero-ticker" aria-label="Resumen de la investigación">
+          <span>UNIVERSIDAD</span><span>DATOS</span><span>CONTROL</span><span>CONFIANZA</span><span>UNIVERSIDAD</span><span>DATOS</span><span>CONTROL</span>
+        </div>
+      </section>
+
+      <section class="manifesto section-shell reveal" id="articulo" aria-labelledby="manifesto-title">
+        <div class="section-marker"><span>01</span><span class="marker-line"></span><span>LECTURA</span></div>
+        <div class="manifesto-content">
+          <p class="eyebrow">Texto expositivo / importancia del tema</p>
+          <h2 id="manifesto-title">Auditar es mirar antes de que alguien más encuentre la puerta.</h2>
+          <p class="manifesto-lead">La matrícula, las notas y los pagos viven en sistemas que rara vez vemos. La auditoría de seguridad se ocupa de esa parte invisible: revisar dónde puede fallar una universidad antes de que el fallo se convierta en una crisis.</p>
+        </div>
+        <div class="manifesto-aside">
+          <span class="aside-mark">//</span>
+          <p>La falla no empieza con el ataque. Empieza cuando nadie sabe quién tiene la llave.</p>
+        </div>
+      </section>
+
+      <section class="article-section section-shell" aria-label="Ensayo">
+        <aside class="article-index">
+          <div class="index-sticky">
+            <span class="index-label">Índice de lectura</span>
+            <a class="is-active" href="#introduccion">Introducción</a>
+            <a href="#desarrollo">Desarrollo</a>
+            <a href="#conclusion">Conclusión</a>
+            <a href="#tesis">Tesis</a>
+            <span class="index-end">Fin del documento / 04</span>
+          </div>
+        </aside>
+
+        <article class="article-body">
+          <div class="article-kicker" id="introduccion"><span>INTRODUCCIÓN</span><span>01 — 04</span></div>
+          <h2>El problema no está lejos: ocurre cada vez que alguien inicia sesión.</h2>
+          <p class="article-lead">En ingeniería de sistemas hay un contraste difícil de ignorar. En la UCV virtual, la matrícula, las notas y los pagos se hacen en Clementina, pero casi nadie sabe quién cuida esos datos.</p>
+          <p>Además, los trámites están repartidos en varios accesos y la interfaz puede confundir a quien recién ingresa. La auditoría de seguridad informática se ocupa justo de eso: revisar dónde puede fallar un sistema antes de que alguien lo aproveche.</p>
+
+          <div class="pull-quote"><span class="quote-mark">“</span><p>Una cuenta compartida no es una solución práctica. Es una puerta sin registro.</p><small>Nota de campo / lectura 01</small></div>
+
+          <div class="article-kicker" id="desarrollo"><span>DESARROLLO</span><span>02 — 04</span></div>
+          <h2>La amenaza no necesita dramatismo. Solo necesita una mala costumbre.</h2>
+          <p>El interés no es teórico. A fines de 2023, la UBA sufrió un ransomware que paralizó inscripciones y notas por semanas; en 2024, la UNAM sufrió phishing dirigido a credenciales. Microsoft (2024) midió que el 43% de las universidades británicas reportaba brechas cada semana.</p>
+          <p>La falta de centralización agrava el cuadro: cada acceso suelto es una puerta más por revisar, con permisos que nadie actualiza. Una interfaz confusa empuja a malos hábitos: compartir cuentas, dejar sesiones abiertas, reutilizar claves.</p>
+
+          <div class="risk-grid" aria-label="Indicadores de riesgo">
+            {risks.map((risk) => (
+              <div class="risk-item">
+                <span class="risk-label">{risk.label}</span>
+                <strong>{risk.value}</strong>
+                <small>{risk.detail}</small>
+              </div>
+            ))}
+          </div>
+
+          <p>La auditoría propone un orden: planificar qué se revisa, mirar accesos y permisos reales, probar vulnerabilidades y documentar hallazgos, como pide ISO 27001 (TÜV Rheinland, 2024).</p>
+
+          <div class="protocol-block">
+            <div class="protocol-heading"><span>PROTOCOLO MÍNIMO</span><span>01 / 04</span></div>
+            <ol>
+              <li><span>01</span><p><strong>Mapear.</strong> Identificar sistemas, responsables y rutas de acceso.</p></li>
+              <li><span>02</span><p><strong>Revisar.</strong> Comparar los permisos asignados con el trabajo real.</p></li>
+              <li><span>03</span><p><strong>Probar.</strong> Simular fallas antes de que aparezcan fuera del laboratorio.</p></li>
+              <li><span>04</span><p><strong>Documentar.</strong> Convertir cada hallazgo en una decisión verificable.</p></li>
+            </ol>
+          </div>
+
+          <div class="article-kicker" id="conclusion"><span>CONCLUSIÓN</span><span>03 — 04</span></div>
+          <h2>Prevenir cuesta menos que reconstruir la confianza.</h2>
+          <p>Auditar no es cazar errores por deporte. Es impedir que se pierdan los datos de miles de estudiantes y que la universidad se detenga días enteros.</p>
+          <p>Esta investigación busca saber qué fallas se repiten en los sistemas académicos y qué controles mínimos las frenan. Con revisiones periódicas, la falla se encuentra a tiempo y recuperarse cuesta menos.</p>
+        </article>
+      </section>
+
+      <section class="thesis section-shell reveal" id="tesis" aria-labelledby="thesis-title">
+        <div class="thesis-stamp">TEXTO<br /><strong>ARGUMENTATIVO</strong></div>
+        <div class="thesis-copy">
+          <p class="eyebrow">Tesis / posición editorial</p>
+          <h2 id="thesis-title">Las universidades deberían auditar sus sistemas académicos cada año, y hacerlo obligatorio.</h2>
+          <p>En la UCV virtual el ejemplo está a la mano: Clementina reparte trámites en varios accesos y su interfaz confunde al ingresante, lo que invita a compartir cuentas y reutilizar claves. Centralizar y auditar esos accesos cuesta menos que reponer datos filtrados, como lo comprobó la UBA en 2023.</p>
+          <p>El método existe y funciona: revisar controles de forma sistemática descubre accesos indebidos antes de que escalen. No hace falta comprar servidores nuevos; basta ordenar quién entra a qué, vigilar la red y exigir claves seguras.</p>
+          <span class="thesis-signature">— Sistema de lectura / A. Mena + A. Felipe</span>
+        </div>
+      </section>
+
+      <section class="sources section-shell reveal" id="fuentes" aria-labelledby="sources-title">
+        <div class="sources-heading">
+          <div>
+            <p class="eyebrow">Cuadro de recolección / fuentes</p>
+            <h2 id="sources-title">Cuatro señales para sostener una alerta.</h2>
+          </div>
+          <p class="sources-note">Cada fuente activa una parte del argumento: contexto, frecuencia, método y evidencia.</p>
+        </div>
+
+        <div class="sources-list">
+          {sources.map((source) => (
+            <a class="source-row" href={source.url} target="_blank" rel="noreferrer">
+              <span class="source-number">{source.number}</span>
+              <span class="source-name">{source.name}<small>{source.year}</small></span>
+              <span class="source-title">{source.title}</span>
+              <span class="source-role">{source.role}</span>
+              <span class="source-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="closing section-shell reveal" aria-labelledby="closing-title">
+        <div class="closing-code">END / 04</div>
+        <h2 id="closing-title">La seguridad también es<br /><em>una forma de cuidar.</em></h2>
+        <a class="button-primary button-dark" href="#inicio">Volver al inicio <span aria-hidden="true">↑</span></a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div><span class="brand-mark">UCV</span><span>Facultad de Ingeniería y Arquitectura<br />Escuela Profesional de Ingeniería de Sistemas</span></div>
+      <div><span>Habilidades comunicativas</span><span>Docente: Eshek Tarazona Vega</span></div>
+      <div><span>© 2026</span><span>Hecho para leer despacio.</span></div>
+    </footer>
+
+    <script>
+      const menuButton = document.querySelector('.menu-toggle');
+      const mobileMenu = document.querySelector('#mobile-menu');
+
+      menuButton?.addEventListener('click', () => {
+        const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!isOpen));
+        mobileMenu?.toggleAttribute('hidden', isOpen);
+      });
+
+      mobileMenu?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          menuButton?.setAttribute('aria-expanded', 'false');
+          mobileMenu.setAttribute('hidden', '');
+        });
+      });
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element));
+    </script>
+  </body>
+</html>
