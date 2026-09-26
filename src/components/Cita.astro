@@ -25,6 +25,23 @@ const cita: TipoCita =
 
 const cuerpo = texto ?? cita.texto;
 const lang = cita.idioma === 'en' ? 'en' : 'es';
+const fecha = new Date(fuente.fecha + 'T12:00:00Z').toLocaleDateString('es-PE', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+/** Jerarquia de la fuente: primaria > secundaria > comercial. No depende solo
+    del color: la etiqueta lleva siempre el texto del tipo. */
+const rango: Record<string, string> = {
+  oficial: 'primaria',
+  norma: 'primaria',
+  academica: 'primaria',
+  institucional: 'declaracion',
+  complementaria: 'secundaria',
+};
+
 const tipoEtiqueta =
   fuente.tipo === 'norma'
     ? 'norma'
@@ -43,20 +60,25 @@ const tipoEtiqueta =
   </blockquote>
 
   <figcaption class="cita__fuente">
-    <div class="cita__org">
-      <span class="cita__tipo mono">{tipoEtiqueta}</span>
+    <div class="cita__fila">
+      <span class="cita__tipo" data-rango={rango[fuente.tipo]}>{tipoEtiqueta}</span>
+      <span class="cita__ref">{fuente.id}</span>
+    </div>
+
+    <p class="cita__org">
       <strong>{fuente.org}</strong>
       {fuente.autor && <span class="cita__autor">{fuente.autor}</span>}
-    </div>
+    </p>
 
-    <div class="cita__obra">
+    <p class="cita__obra">
       <cite>{fuente.titulo}</cite>
-      {fuente.medio && <span class="cita__medio"> · {fuente.medio}</span>}
-      <span class="cita__fecha"> · {fuente.fecha}</span>
-    </div>
+      {fuente.medio && <span> — {fuente.medio}</span>}
+    </p>
 
     <div class="cita__pie">
-      <span class="cita__acceso mono">acceso: {fuente.acceso}</span>
+      <span class="cita__fecha">{fecha}</span>
+      <span class="cita__sep" aria-hidden="true">·</span>
+      <span class="cita__acceso">lectura {fuente.acceso}</span>
       <a
         class="cita__enlace"
         href={fuente.url}
@@ -64,7 +86,7 @@ const tipoEtiqueta =
         rel="noopener noreferrer"
         aria-label={`Abrir fuente: ${fuente.titulo}`}
       >
-        leer la fuente <Icon nombre="external-link" tam={14} />
+        ver el original <Icon nombre="external-link" tam={13} />
       </a>
     </div>
 
@@ -105,11 +127,16 @@ const tipoEtiqueta =
   .cita--fila {
     border-left-width: 1px;
     border-left-color: var(--linea);
+    padding-left: clamp(0.8rem, 2vw, 1.15rem);
   }
 
   .cita--fila .cita__texto p {
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.55;
+  }
+
+  .cita--fila .cita__texto {
+    margin-bottom: 0.35rem;
   }
 
   [lang='en'] {
@@ -118,57 +145,106 @@ const tipoEtiqueta =
 
   .cita__fuente {
     display: grid;
-    gap: 0.2rem;
+    gap: 0.42rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--linea);
+  }
+
+  .cita__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .cita__tipo {
     font-family: var(--mono);
     font-size: var(--fs-10);
-    line-height: 1.75;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
+    padding: 0.16rem 0.42rem;
+    border-radius: 2px;
+    border: 1px solid var(--ac);
+    color: var(--ac);
+    white-space: nowrap;
+  }
+
+  .cita__tipo[data-rango='primaria'] {
+    background: var(--ac-hondo);
+    border-color: var(--ac-hondo);
+    color: #fff;
+  }
+
+  .cita__tipo[data-rango='secundaria'] {
+    border-color: var(--linea);
+    color: var(--tinta-baja);
+  }
+
+  .cita__ref {
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.06em;
     color: var(--tinta-apagada);
   }
 
   .cita__org {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem;
+    line-height: 1.4;
   }
 
   .cita__org strong {
+    font-size: var(--fs-7);
+    font-weight: 700;
+    letter-spacing: 0.01em;
     color: var(--tinta);
-    font-weight: 500;
-  }
-
-  .cita__tipo {
-    border: 1px solid var(--linea);
-    border-radius: 2px;
-    padding: 0.1rem 0.35rem;
-    color: var(--tinta-baja);
-    white-space: nowrap;
   }
 
   .cita__autor {
+    display: block;
+    font-size: var(--fs-7);
     color: var(--tinta-baja);
+    margin-top: 0.1rem;
   }
 
   .cita__obra {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    line-height: 1.42;
     color: var(--tinta-media);
+  }
+
+  .cita__obra cite {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .cita__obra span {
+    font-style: normal;
+    color: var(--tinta-baja);
+    font-size: 0.85em;
   }
 
   .cita__pie {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem;
-    margin-top: 0.45rem;
-    padding-top: 0.45rem;
-    border-top: 1px dotted var(--linea);
+    gap: 0.45rem;
+    margin-top: 0.25rem;
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    color: var(--tinta-baja);
+  }
+
+  .cita__sep {
+    color: var(--linea);
   }
 
   .cita__enlace {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.3rem;
+    margin-left: auto;
     color: var(--ac);
     border-bottom: 1px solid var(--ac-borde);
     transition: border-color var(--d-2) var(--ease-out);

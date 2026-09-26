@@ -250,10 +250,10 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
   .caso {
     border: 1px solid var(--linea);
     border-radius: 3px;
-    padding: clamp(1.1rem, 2vw, 1.5rem);
+    padding: clamp(1.3rem, 2.4vw, 1.8rem);
     display: grid;
     align-content: start;
-    gap: 0.9rem;
+    gap: 1.15rem;
     transition: border-color var(--d-2) var(--ease-out), transform var(--d-2) var(--ease-out);
   }
 
@@ -332,7 +332,7 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
   }
 
   .control {
-    padding: 1.1rem 0.6rem 1.1rem 0;
+    padding: 1.45rem 0.6rem 1.45rem 0;
     border-top: 1px solid var(--linea);
     transition: background-color var(--d-2) var(--ease-out), padding-left var(--d-2) var(--ease-out);
   }
@@ -362,8 +362,9 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
 
   .control__dice {
     font-size: var(--fs-6);
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--tinta-media);
+    max-width: 72ch;
   }
 
   .peru {
