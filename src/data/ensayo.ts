@@ -267,82 +267,6 @@ export const limites: Limite[] = [
   },
 ];
 
-export type Correccion = {
-  antes: string;
-  problema: 'inventado' | 'no verificable' | 'mal atribuido' | 'exagerado' | 'roto';
-  ahora: string;
-};
-
-/** Registro de verificación: qué se cayó del sitio y por qué. */
-export const correcciones: Correccion[] = [
-  {
-    antes: '«Accesos · 07 · roles sin revisar»',
-    problema: 'inventado',
-    ahora:
-      'Ese 7 no aparecía en ninguna de las cuatro fuentes citadas. Entra el dato real con dueño: 128 exposiciones de configuración de Git, 7 de ellas con credenciales en el archivo config (Hackmetrix, 2025).',
-  },
-  {
-    antes: '«Microsoft (2024) midió que el 43% de las universidades británicas reportaba brechas cada semana»',
-    problema: 'mal atribuido',
-    ahora:
-      'Tres errores: Microsoft no midió nada, cita una encuesta oficial; la población son instituciones de educación superior de Reino Unido; y el 43% es solo entre las que ya habían identificado un brecha, sobre 30 instituciones con margen ±8–14 pp. Se cita a DSIT como primario y se usa el 27% de 2025/26.',
-  },
-  {
-    antes: '«En 2024, la UNAM sufrió phishing dirigido a credenciales»',
-    problema: 'no verificable',
-    ahora:
-      'No se encontró ni una nota de prensa, boletín oficial ni reporte que lo documente. Su único origen es una lista de un blog de empresa sin enlace. Sale del sitio y entra el boletín oficial de enero 2026.',
-  },
-  {
-    antes: '«La UBA sufrió un ransomware que paralizó inscripciones y notas por semanas»',
-    problema: 'exagerado',
-    ahora:
-      'El incidente y el tipo de malware son ciertos y confirmados por la propia universidad. «Paralizó por semanas» no: hubo cronograma alternativo por facultad y lo que se prolongó fue el restablecimiento completo.',
-  },
-  {
-    antes: '«…probar vulnerabilidades…, como pide ISO 27001»',
-    problema: 'mal atribuido',
-    ahora:
-      'Una auditoría ISO 27001 no es una prueba de vulnerabilidades: revisa documentación y procesos y muestrea. Se separan los dos instrumentos y cada uno se cita con su fuente.',
-  },
-  {
-    antes: '«Las universidades deberían auditar cada año y hacerlo obligatorio»',
-    problema: 'exagerado',
-    ahora:
-      'Ninguna de las fuentes respalda el «cada año». El precedente legal real exige al menos cada dos años. La tesis se reformula: una política anual es más exigente que ese mínimo, no una ocurrencia.',
-  },
-  {
-    antes: 'URL de Microsoft con el slug «ciberdelincuentes»',
-    problema: 'roto',
-    ahora:
-      'Devolvía 404. El slug oficial dice «cibercriminales». Corregida y verificada en vivo: las cinco citas textualmente están en la página.',
-  },
-  {
-    antes: '«Acurio et al.»',
-    problema: 'mal atribuido',
-    ahora:
-      'El apellido compuesto es León Acurio. Además el título estaba recortado y el DOI impreso por la revista no está registrado en Crossref, así que no se enlaza.',
-  },
-  {
-    antes: '«STATUS: EXPOSED» sobre el sistema de la UCV',
-    problema: 'inventado',
-    ahora:
-      'Atribuir un estado de seguridad a una institución concreta sin haberlo medido es la afirmación más grave del sitio anterior. Sale: el diagrama ahora representa el método, con su nota de que no es telemetría.',
-  },
-  {
-    antes: '«Nota de campo / lectura 01»',
-    problema: 'inventado',
-    ahora:
-      'No hay trabajo de campo en este ensayo. La etiqueta se retira: lo que es observación personal del autor se dice como observación personal.',
-  },
-  {
-    antes: '«Escuela Profesional de Ingeniería de Sistemas»',
-    problema: 'no verificable',
-    ahora:
-      'El sitio oficial de la universidad usa «Escuela de Ingeniería de Sistemas» bajo la Facultad de Ingeniería y Arquitectura. Se corrige a la forma oficial.',
-  },
-];
-
 export type Marca = {
   id: 'ucv' | 'nist' | 'enisa' | 'unam' | 'uba';
   nombre: string;
@@ -414,5 +338,64 @@ export const marcasNoUsadas = [
     nombre: 'Escudo Nacional del Perú',
     porque:
       'Regulado por la ley de símbolos patrios; usarlo decorativamente en un trabajo universitario es arriesgado. Se nombra al CNSD en texto.',
+  },
+];
+
+/**
+ * Personas que hablan en el ensayo, con su cargo y su institucion. Cada frase
+ * esta copiada literalmente de la fuente indicada. No se incluyen retratos: no
+ * existe ninguna fotografía de estas personas con licencia que permita
+ * reproducirla, y una cara generada junto a una cita ajena sería fabricar
+ * evidencia. La autoridad aqui la da el nombre, la institucion y el texto.
+ */
+export type Voz = {
+  nombre: string;
+  rol: string;
+  institución: string;
+  fuenteId: string;
+  buscar: string;
+  contexto: string;
+};
+
+export const voces: Voz[] = [
+  {
+    nombre: 'Federico Rodríguez',
+    rol: 'Autor del informe',
+    institución: 'Microsoft Latinoamérica',
+    fuenteId: 'microsoft-2024',
+    buscar: 'industria de industrias',
+    contexto: 'Por qué una universidad acumula datos sensibles sin ser un banco ni un hospital.',
+  },
+  {
+    nombre: 'R. Aquino Arcata',
+    rol: 'Coautor',
+    institución: 'Universidad Nacional Jorge Basadre Grohmann, Tacna',
+    fuenteId: 'aquino-2023',
+    buscar: 'plataforma informática de trabajo',
+    contexto: 'Definió el objeto que este ensayo audita, en una universidad pública peruana.',
+  },
+  {
+    nombre: 'M. A. Burgos-Rojas',
+    rol: 'Coautor',
+    institución: 'Universidad Nacional de Trujillo',
+    fuenteId: 'burgos-rojas-2024',
+    buscar: 'puede impactar de manera importante',
+    contexto: 'Revisión sistemática con método declarado: qué cambia elegir un marco y no otro.',
+  },
+  {
+    nombre: 'Joffre Vicente León Acurio',
+    rol: 'Autor principal',
+    institución: 'Universidad Técnica de Babahoyo, Ecuador',
+    fuenteId: 'leon-acurio-2024',
+    buscar: 'El objetivo principal del estudio',
+    contexto: 'De aquí salen las cinco fases del ciclo que se recorre en el capítulo III.',
+  },
+  {
+    nombre: 'Juan David Fernández',
+    rol: 'AppSec Engineer',
+    institución: 'Hackmetrix',
+    fuenteId: 'hackmetrix-2025',
+    buscar: 'no refleja la totalidad',
+    contexto: 'El autor de un estudio propio declarando, antes que nadie, hasta dónde no llega.',
   },
 ];

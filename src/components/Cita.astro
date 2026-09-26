@@ -25,12 +25,16 @@ const cita: TipoCita =
 
 const cuerpo = texto ?? cita.texto;
 const lang = cita.idioma === 'en' ? 'en' : 'es';
-const fecha = new Date(fuente.fecha + 'T12:00:00Z').toLocaleDateString('es-PE', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
+/* Una fecha sin dia ni mes se imprime tal cual: no se inventa la precision
+   que la fuente no da. */
+const fecha = /^\d{4}$/.test(fuente.fecha)
+  ? fuente.fecha
+  : new Date(fuente.fecha + 'T12:00:00Z').toLocaleDateString('es-PE', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
 
 /** Jerarquia de la fuente: primaria > secundaria > comercial. No depende solo
     del color: la etiqueta lleva siempre el texto del tipo. */
@@ -76,7 +80,9 @@ const tipoEtiqueta =
     </p>
 
     <div class="cita__pie">
-      <span class="cita__fecha">{fecha}</span>
+      <span class="cita__fecha">
+        {fuente.fechaTipo === 'consulta' ? 'consultada el ' : ''}{fecha}
+      </span>
       <span class="cita__sep" aria-hidden="true">·</span>
       <span class="cita__acceso">lectura {fuente.acceso}</span>
       <a

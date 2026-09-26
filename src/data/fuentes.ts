@@ -16,6 +16,10 @@ export type Fuente = {
   medio?: string;
   fecha: string;
   url: string;
+  /** 'publicacion' es la fecha del documento; 'consulta' se usa cuando la
+      fuente es una pagina viva sin fecha de edicion y lo unico honesto es
+      decir cuando se leyo. Un anio suelto se imprime suelto. */
+  fechaTipo?: 'publicacion' | 'consulta';
   /** Cómo se obtuvo el texto: en vivo, vía snapshot, etc. */
   acceso: 'en vivo' | 'snapshot';
   doi?: string;
@@ -408,7 +412,7 @@ export const fuentes: Fuente[] = [
     titulo:
       'Impacto del uso de diversos marcos de seguridad en las auditorías informáticas dentro de las organizaciones: Revisión sistemática',
     medio: 'Revista Científica de la UCSA, 11(2) · SciELO · DOI registrado',
-    fecha: '2024-04-01',
+    fecha: '2024',
     url: 'https://scielo.iics.una.py/scielo.php?script=sci_arttext&pid=S2409-87522024000200103&lng=es&nrm=iso&tlng=es',
     acceso: 'en vivo',
     doi: 'https://doi.org/10.18004/ucsa/2409-8752/2024.011.02.0103',
@@ -470,6 +474,7 @@ export const fuentes: Fuente[] = [
     org: 'National Cyber Security Centre (Reino Unido)',
     titulo: '10 Steps to Cyber Security',
     fecha: '2026-09-25',
+    fechaTipo: 'consulta',
     url: 'https://www.ncsc.gov.uk/collection/10-steps-to-cyber-security',
     acceso: 'en vivo',
     nota: 'Fecha indicada como «vigente»; es una guía viva, no una publicación fechada.',
@@ -488,6 +493,7 @@ export const fuentes: Fuente[] = [
     org: 'Centro Nacional de Seguridad Digital — Presidencia del Consejo de Ministros (Perú)',
     titulo: 'Centro Nacional de Seguridad Digital',
     fecha: '2026-09-25',
+    fechaTipo: 'consulta',
     url: 'https://www.gob.pe/cnsd',
     acceso: 'en vivo',
     nota: 'Página institucional vigente. Convierte el «no hace falta comprar servidores nuevos» en algo verificable.',

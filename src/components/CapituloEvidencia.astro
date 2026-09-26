@@ -3,7 +3,7 @@ import Seccion from './Seccion.astro';
 import Cita from './Cita.astro';
 import Icon from './Icon.astro';
 import Figura from './Figura.astro';
-import { metricas, casos, controles, marcas } from '../data/ensayo';
+import { metricas, casos, controles, marcas, voces } from '../data/ensayo';
 import { fuentesPorId } from '../data/fuentes';
 import escudoUba from '../assets/marks/uba.svg?url';
 import escudoUnam from '../assets/marks/unam.svg?url';
@@ -84,6 +84,36 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
       alt="Documento institucional con banda azul marino en el encabezado y texto ilegible, sobre una superficie blanca"
       pie="Los tres casos de arriba no salen de un blog: salen de un comunicado, de un boletín y de el informe de una agencia. Este es el aspecto que tiene una fuente primaria cuando la encuentras."
     />
+  </div>
+
+  <div class="bloque voces">
+    <div class="voces__cabeza">
+      <h3 class="bloque__titulo display">Quién habla en este documento</h3>
+      <p class="bloque__lead">
+        Cinco personas con nombre, cargo e institución. Cada frase está copiada literalmente del
+        texto que firmaron, y se puede abrir para cotejarla. No hay retratos: ninguna fotografía de
+        estas personas está publicada con una licencia que permita reproducirla, y una cara
+        inventada junto a una cita ajena sería fabricar la evidencia.
+      </p>
+    </div>
+
+    {
+      voces.map((v, i) => (
+        <article class="voz" data-reveal style={`--i:${i}`}>
+          <header class="voz__quien">
+            <span class="voz__comilla display" aria-hidden="true">“</span>
+            <h4 class="voz__nombre">{v.nombre}</h4>
+            <p class="voz__filia mono">
+              {v.rol} · {v.institución}
+            </p>
+            <p class="voz__contexto">{v.contexto}</p>
+          </header>
+          <div class="voz__dicho">
+            <Cita fuenteId={v.fuenteId} buscar={v.buscar} variante="fila" />
+          </div>
+        </article>
+      ))
+    }
   </div>
 
   <div class="bloque">
@@ -313,6 +343,67 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
     color: var(--ac);
   }
 
+  /* --- voces --- */
+  .voces__cabeza {
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .voz {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-block: clamp(1.4rem, 2.6vw, 2rem);
+    border-top: 1px solid var(--linea);
+    transition: background-color var(--d-2) var(--ease-out);
+  }
+
+  .voz:last-child {
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .voz:hover {
+    background: var(--papel-bajo);
+  }
+
+  .voz__quien {
+    position: relative;
+  }
+
+  .voz__comilla {
+    display: block;
+    font-size: 3.2rem;
+    line-height: 0.6;
+    color: var(--ac-borde);
+    margin-bottom: 0.5rem;
+  }
+
+  .voz__nombre {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.28rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--tinta);
+  }
+
+  .voz__filia {
+    margin-top: 0.45rem;
+    line-height: 1.6;
+    color: var(--ac);
+  }
+
+  .voz__contexto {
+    margin-top: 0.7rem;
+    font-size: var(--fs-7);
+    line-height: 1.65;
+    color: var(--tinta-baja);
+    max-width: 30ch;
+  }
+
+  .voz__dicho {
+    min-width: 0;
+  }
+
   .controles {
     margin-top: 2rem;
     border-top: 2px solid var(--tinta);
@@ -429,6 +520,13 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
     }
     .peru {
       grid-template-columns: 1fr;
+    }
+    .voz {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .voz__contexto {
+      max-width: 46ch;
     }
   }
 </style>
