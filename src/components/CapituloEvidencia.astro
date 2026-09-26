@@ -78,8 +78,9 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
       nombre="comunicado-oficial"
       fig="05"
       ancho={1400}
+      maxAncho="62rem"
+      ratio="21/9"
       carga="lazy"
-      clase="caso-fig"
       alt="Documento institucional con banda azul marino en el encabezado y texto ilegible, sobre una superficie blanca"
       pie="Los tres casos de arriba no salen de un blog: salen de un comunicado, de un boletín y de el informe de una agencia. Este es el aspecto que tiene una fuente primaria cuando la encuentras."
     />
@@ -141,6 +142,7 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
       nombre="muro-cusco"
       fig="04"
       ancho={900}
+      ratio="4/3"
       alt="Muro de piedra andina que continúa en pared encalada con una ventana de reja azul"
       pie="Cantería andina y muro colonial en la misma esquina: dos capas, una estructura que sigue de pie porque alguien la revisa."
     />
@@ -241,9 +243,8 @@ const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuent
     margin-top: 2rem;
   }
 
-  .caso-fig {
+  .casos + :global(.fig) {
     margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    max-width: 58rem;
   }
 
   .caso {

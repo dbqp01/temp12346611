@@ -6,6 +6,10 @@
 
 const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* El revelado nace oculto solo si este script se ejecuto. Anadir la clase
+   aqui es lo que separa "animacion pendiente" de "contenido invisible". */
+document.documentElement.classList.add('con-js');
+
 /* --- Progreso de lectura ------------------------------------------------- */
 
 function progreso(): void {
@@ -62,7 +66,14 @@ function contadores(): void {
 
   const arrancar = (el: HTMLElement) => {
     const meta = Number(el.dataset.contador);
-    const duracion = reducido ? 1 : 1100;
+    if (!Number.isFinite(meta)) return;
+
+    // El valor final ya esta escrito en el HTML prerenderizado. Solo lo
+    // sustituimos si de verdad vamos a animarlo: en una pestana de fondo
+    // requestAnimationFrame no avanza y el lector se quedaria con un 0.
+    if (reducido || document.hidden) return;
+
+    const duracion = 1100;
     let inicio = 0;
 
     const paso = (ts: number) => {
@@ -76,11 +87,6 @@ function contadores(): void {
     requestAnimationFrame(paso);
   };
 
-  if (reducido) {
-    nodos.forEach((n) => arrancar(n));
-    return;
-  }
-
   const io = new IntersectionObserver(
     (entradas) => {
       for (const e of entradas) {
@@ -93,15 +99,27 @@ function contadores(): void {
   );
 
   nodos.forEach((n) => io.observe(n));
+
+  // Red de seguridad: si el cruce ocurrio con la pestana oculta y aun asi
+  // llego a escribirse un cero, al volver visible se restaura el valor real.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) return;
+    nodos.forEach((n) => {
+      const meta = Number(n.dataset.contador);
+      if (Number.isFinite(meta) && n.textContent?.trim() === '0') {
+        n.textContent = meta.toLocaleString('es-PE');
+      }
+    });
+  });
 }
 
 /* --- Scrollytelling: el texto arma el diagrama ---------------------------- */
 
 const activos: Record<string, string[]> = {
-  'puerta': ['n-alumno', 'n-docente', 'a-puerta-1', 'a-puerta-2', 'q-alumno', 'q-docente', 'paquete-1', 'paquete-2'],
-  'permiso': ['n-puerta', 'a-portal', 'etiqueta-praa', 'paquete-3'],
-  'dato': ['n-portal', 'n-base', 'n-registro', 'a-base', 'a-registro', 'etiqueta-cifrado', 'etiqueta-decm'],
-  'cadencia': ['anillo'],
+  puerta: ['n-alumno', 'n-docente', 'a-puerta-1', 'a-puerta-2', 'paquete-1', 'paquete-2'],
+  permiso: ['n-puerta', 'a-portal', 'etiqueta-praa', 'paquete-3'],
+  dato: ['n-portal', 'n-base', 'n-registro', 'a-base', 'a-registro', 'etiqueta-cifrado', 'etiqueta-decm'],
+  cadencia: ['anillo'],
 };
 
 function scrolly(): void {
@@ -109,6 +127,11 @@ function scrolly(): void {
   const flujo = document.getElementById('flujo');
   const contador = document.getElementById('flujo-contador');
   if (!pasos.length || !flujo) return;
+
+  // El oscurecido y el trazado pendiente solo existen si este script corre.
+  // Sin JS, o si el observador no dispara, el metodo se lee completo.
+  flujo.classList.add('armado');
+  pasos.forEach((p) => p.classList.add('armado'));
 
   const marcar = (clave: string, encendido: boolean) => {
     for (const id of activos[clave] ?? []) {

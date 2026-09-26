@@ -55,7 +55,7 @@ const cinta = [
   </div>
 
   <p class="hero__aviso mono">
-    La fotografía es ilustrativa: no muestra la UCV ni ningún sistema real
+    Fotografía ilustrativa · no muestra la UCV
   </p>
 
   <div class="cinta" aria-hidden="true">
@@ -182,15 +182,14 @@ const cinta = [
   .hero__aviso {
     position: absolute;
     right: clamp(1rem, 3vw, 2rem);
-    bottom: 5.5rem;
+    bottom: 5.25rem;
     z-index: 2;
-    max-width: 20ch;
-    text-align: right;
+    white-space: nowrap;
     color: #fff;
-    background: rgba(11, 11, 13, 0.72);
-    padding: 0.4rem 0.6rem;
+    background: rgba(11, 11, 13, 0.74);
+    padding: 0.4rem 0.7rem;
     border-radius: 2px;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   .cinta {

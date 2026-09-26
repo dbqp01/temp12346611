@@ -97,8 +97,8 @@ const dentro = [
       nombre="biblioteca"
       fig="01"
       ancho={1400}
+      ratio="16/9"
       carga="eager"
-      clase="banda__fig"
       alt="Sala de lectura de una biblioteca universitaria con mesas largas de madera clara y luz alta por ventanales"
       pie="El lado visible de la universidad: donde el estudiante cree que termina el sistema."
     />
@@ -106,7 +106,7 @@ const dentro = [
       nombre="laboratorio-computo"
       fig="02"
       ancho={900}
-      clase="banda__fig"
+      ratio="16/9"
       alt="Sala de cómputo universitaria con una fila de monitores oscuros y luz de ventana a contraluz"
       pie="El lado que ya no se ve: el punto donde la matrícula deja de ser un trámite y pasa a ser un registro."
     />
@@ -178,6 +178,7 @@ const dentro = [
       nombre="portal-telefono"
       fig="03"
       ancho={1000}
+      maxAncho="46rem"
       carga="lazy"
       alt="Manos de una estudiante sosteniendo un teléfono sobre un escritorio claro"
       pie="El trámite cotidiano: un acceso, una sesión abierta, una contraseña. Todo lo demás de esta página trata de quién lo revisa."
@@ -188,7 +189,7 @@ const dentro = [
 <style>
   .sumario {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 1px;
     background: var(--linea);
     border: 1px solid var(--linea);
@@ -240,6 +241,17 @@ const dentro = [
     text-wrap: pretty;
   }
 
+  /* Con cinco tarjetas en tres columnas quedaria un hueco de tres casillas.
+     Las dos ultimas ocupan fila completa: la retícula cierra sin vacío. */
+  .sumario__item:nth-child(4),
+  .sumario__item:nth-child(5) {
+    grid-column: span 3;
+  }
+
+  .sumario__item:not(:nth-child(4)):not(:nth-child(5)) {
+    grid-column: span 2;
+  }
+
   .subtitulo {
     font-size: clamp(1.4rem, 2.6vw, 2rem);
     margin-bottom: 0.9rem;
@@ -247,6 +259,7 @@ const dentro = [
 
   .banda {
     display: grid;
+    align-items: stretch;
     grid-template-columns: 1.5fr 1fr;
     gap: clamp(1.25rem, 3vw, 2.25rem);
     align-items: start;
@@ -298,16 +311,11 @@ const dentro = [
     background: var(--papel);
     padding: 1.1rem;
     display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    column-gap: 0.6rem;
-    row-gap: 0.15rem;
+    gap: 0.3rem;
   }
 
   .componentes__lista svg {
-    grid-row: 1 / span 2;
     color: var(--ac);
-    margin-top: 0.15rem;
   }
 
   .componentes__nombre {
@@ -390,7 +398,6 @@ const dentro = [
 
   .perimetro :global(.fig) {
     margin-top: clamp(2rem, 4vw, 3rem);
-    max-width: 46rem;
   }
 
   @media (max-width: 860px) {
