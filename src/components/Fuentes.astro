@@ -73,7 +73,7 @@ const grupos = orden.map((o) => ({ ...o, items: fuentes.filter((f) => f.tipo ===
                     <cite>{f.titulo}</cite>
                   </span>
                   <span class="fuente__meta mono">
-                    {f.fecha}
+                    {f.fechaTipo === 'consulta' ? `consulta ${f.fecha}` : f.fecha}
                     <em>{f.acceso}</em>
                   </span>
                   <span class="fuente__chevron" aria-hidden="true">
@@ -112,6 +112,15 @@ const grupos = orden.map((o) => ({ ...o, items: fuentes.filter((f) => f.tipo ===
                       </li>
                     ))}
                   </ul>
+
+                  {
+                    f.fechaTipo === 'consulta' && (
+                      <p class="fuente__nota">
+                        Página institucional sin fecha de edición: se indica cuándo se consultó, no
+                        cuándo se publicó.
+                      </p>
+                    )
+                  }
 
                   {f.nota && <p class="fuente__advertencia">{f.nota}</p>}
 
