@@ -1,0 +1,373 @@
+---
+import Seccion from './Seccion.astro';
+import Icon from './Icon.astro';
+import { fuentes, type TipoFuente } from '../data/fuentes';
+
+const orden: { tipo: TipoFuente; titulo: string; nota: string }[] = [
+  {
+    tipo: 'oficial',
+    titulo: 'Estadística y normativa pública',
+    nota: 'Encuestas de agencias del Estado y boletines oficiales. Aquí están las cifras.',
+  },
+  {
+    tipo: 'norma',
+    titulo: 'Normas',
+    nota: 'Lo que está escrito, no lo que alguien opina sobre ello.',
+  },
+  {
+    tipo: 'academica',
+    titulo: 'Literatura arbitrada',
+    nota: 'Dos de los tres artículos son peruanos; el tercero es el antecedente directo del objeto de estudio.',
+  },
+  {
+    tipo: 'institucional',
+    titulo: 'Declaraciones de las propias instituciones',
+    nota: 'Lo que cada universidad dijo de su incidente, con su fecha.',
+  },
+  {
+    tipo: 'complementaria',
+    titulo: 'Fuentes de empresa',
+    nota: 'Utilidad real y límite declarado. Ninguna se usa como evidencia de incidente.',
+  },
+];
+
+const grupos = orden.map((o) => ({ ...o, items: fuentes.filter((f) => f.tipo === o.tipo) }));
+---
+
+<Seccion
+  n="VI"
+  capitulo="Fuentes"
+  id="fuentes"
+  titulo="Dieciocho fuentes, cada una con su límite a la vista"
+  lead="Se despliegan con sus citas textuales para que cualquier afirmación del ensayo pueda rastrearse hasta el párrafo exacto de donde salió. Donde el sitio bloqueaba la lectura automática, se indica que se usó una copia archivada."
+>
+  <div class="indice">
+    {
+      grupos.map((g) =>
+        g.items.length > 0 && (
+          <div class="indice__fila">
+            <span class="indice__n mono">{String(g.items.length).padStart(2, '0')}</span>
+            <span class="indice__t">{g.titulo}</span>
+          </div>
+        ),
+      )
+    }
+  </div>
+
+  {
+    grupos.map((grupo) =>
+      grupo.items.length > 0 && (
+        <div class="grupo">
+          <header class="grupo__cabeza">
+            <h3>{grupo.titulo}</h3>
+            <p>{grupo.nota}</p>
+          </header>
+
+          <div class="fuentes">
+            {grupo.items.map((f, i) => (
+              <details class="fuente" id={`fu-${f.id}`} data-reveal style={`--i:${i}`}>
+                <summary class="fuente__resumen">
+                  <span class="fuente__n mono">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="fuente__principal">
+                    <strong>{f.org}</strong>
+                    <cite>{f.titulo}</cite>
+                  </span>
+                  <span class="fuente__meta mono">
+                    {f.fecha}
+                    <em>{f.acceso}</em>
+                  </span>
+                  <span class="fuente__chevron" aria-hidden="true">
+                    <Icon nombre="arrow-up-right" tam={15} />
+                  </span>
+                </summary>
+
+                <div class="fuente__cuerpo">
+                  {f.autor && (
+                    <p class="fuente__dato">
+                      <span class="mono">Autoría</span> {f.autor}
+                    </p>
+                  )}
+                  {f.medio && (
+                    <p class="fuente__dato">
+                      <span class="mono">Publicado en</span> {f.medio}
+                    </p>
+                  )}
+                  {f.doi && (
+                    <p class="fuente__dato">
+                      <span class="mono">DOI</span>{' '}
+                      <a class="enlace" href={f.doi} target="_blank" rel="noopener noreferrer">
+                        {f.doi.replace('https://', '')}
+                      </a>
+                    </p>
+                  )}
+
+                  <ul class="fuente__citas">
+                    {f.citas.map((c) => (
+                      <li>
+                        <blockquote lang={c.idioma === 'en' ? 'en' : 'es'}>
+                          <p>{c.texto}</p>
+                        </blockquote>
+                        <p class="fuente__sustenta">{c.sustenta}</p>
+                        {c.nota && <p class="fuente__nota">{c.nota}</p>}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {f.nota && <p class="fuente__advertencia">{f.nota}</p>}
+
+                  <a
+                    class="fuente__ir"
+                    href={f.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Abrir ${f.titulo}`}
+                  >
+                    Abrir la fuente original <Icon nombre="external-link" tam={14} />
+                  </a>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ),
+    )
+  }
+</Seccion>
+
+<style>
+  .indice {
+    border-block: 1px solid var(--linea);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .indice__fila {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.7rem 0;
+    border-bottom: 1px dotted var(--linea);
+  }
+
+  .indice__fila:last-child {
+    border-bottom: 0;
+  }
+
+  .indice__n {
+    color: var(--ac);
+  }
+
+  .indice__t {
+    font-size: var(--fs-6);
+    color: var(--tinta-media);
+  }
+
+  .grupo {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .grupo__cabeza {
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--tinta);
+  }
+
+  .grupo__cabeza h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  .grupo__cabeza p {
+    margin-top: 0.35rem;
+    font-size: var(--fs-7);
+    color: var(--tinta-baja);
+  }
+
+  .fuentes {
+    display: grid;
+    gap: 1px;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+  }
+
+  .fuente {
+    background: var(--papel);
+    scroll-margin-top: 6rem;
+  }
+
+  .fuente[open] {
+    background: var(--papel-bajo);
+  }
+
+  .fuente__resumen {
+    display: grid;
+    grid-template-columns: 42px 1fr auto auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.05rem 1.1rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color var(--d-2) var(--ease-out);
+  }
+
+  .fuente__resumen::-webkit-details-marker {
+    display: none;
+  }
+
+  .fuente__resumen:hover {
+    background: var(--ac-lavanda);
+  }
+
+  .fuente__n {
+    color: var(--ac);
+    padding-top: 0.15rem;
+  }
+
+  .fuente__principal {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .fuente__principal strong {
+    font-size: var(--fs-5);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+  }
+
+  .fuente__principal cite {
+    font-style: normal;
+    font-size: var(--fs-7);
+    line-height: 1.5;
+    color: var(--tinta-media);
+  }
+
+  .fuente__meta {
+    display: grid;
+    gap: 0.2rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .fuente__meta em {
+    font-style: normal;
+    color: var(--ac);
+  }
+
+  .fuente__chevron {
+    color: var(--tinta-apagada);
+    transform: rotate(0deg);
+    transition: transform var(--d-2) var(--ease-out);
+    align-self: center;
+  }
+
+  details[open] .fuente__chevron {
+    transform: rotate(90deg);
+    color: var(--ac);
+  }
+
+  .fuente__cuerpo {
+    padding: 0 1.1rem 1.4rem calc(42px + 2rem);
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .fuente__dato {
+    font-size: var(--fs-7);
+    line-height: 1.6;
+    color: var(--tinta-media);
+  }
+
+  .fuente__dato .mono {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+
+  .fuente__citas {
+    margin: 0.3rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .fuente__citas li {
+    border-left: 2px solid var(--ac-borde);
+    padding-left: 0.9rem;
+  }
+
+  .fuente__citas blockquote p {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 1.02rem;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--tinta);
+  }
+
+  .fuente__citas [lang='en'] p {
+    font-style: italic;
+  }
+
+  .fuente__sustenta {
+    margin-top: 0.35rem;
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.6;
+    color: var(--tinta-baja);
+  }
+
+  .fuente__nota {
+    margin-top: 0.3rem;
+    font-size: var(--fs-7);
+    line-height: 1.55;
+    color: var(--tinta-baja);
+  }
+
+  .fuente__advertencia {
+    margin-top: 0.4rem;
+    padding: 0.8rem 0.9rem;
+    background: #fff;
+    border: 1px dashed var(--ac-borde);
+    border-radius: 3px;
+    font-size: var(--fs-7);
+    line-height: 1.6;
+    color: var(--tinta-media);
+  }
+
+  .fuente__ir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+    font-family: var(--mono);
+    font-size: var(--fs-9);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ac);
+    border-bottom: 1px solid var(--ac-borde);
+    width: fit-content;
+    transition: border-color var(--d-2) var(--ease-out);
+  }
+
+  .fuente__ir:hover {
+    border-color: var(--ac);
+  }
+
+  @media (max-width: 760px) {
+    .fuente__resumen {
+      grid-template-columns: 34px 1fr auto;
+    }
+    .fuente__meta {
+      grid-column: 2;
+      text-align: left;
+    }
+    .fuente__cuerpo {
+      padding-left: 1.1rem;
+    }
+  }
+</style>

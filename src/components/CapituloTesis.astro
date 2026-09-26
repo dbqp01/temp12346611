@@ -1,0 +1,266 @@
+---
+import Seccion from './Seccion.astro';
+import Cita from './Cita.astro';
+import Figura from './Figura.astro';
+import Icon from './Icon.astro';
+import { marcasNoUsadas } from '../data/ensayo';
+---
+
+<Seccion
+  n="V"
+  capitulo="La tesis"
+  id="tesis"
+  titulo="Revisar cada año, y decir por qué dos ya es el mínimo"
+  lead="La posición de este ensayo es concreta y ampliable: los sistemas de información académica deberían someterse a auditoría periódica obligatoria, con una cadencia más exigente que la que hoy fija el único precedente legal comparable."
+>
+  <div class="tesis">
+    <div class="tesis__cuerpo">
+      <p class="tesis__afirmacion display">
+        Todo sistema de información académica de una universidad debería ser auditado
+        <em>al menos una vez al año</em>, y la obligación debería estar escrita en una política
+        institucional, no en la buena voluntad de quien esté de turno.
+      </p>
+
+      <p>
+        La primera parte de la tesis no es una intuición: es el piso que ya existe. En España el
+        Esquema Nacional de Seguridad impone a los sistemas del sector público una auditoría
+        ordinaria «al menos cada dos años», más una extraordinaria cada vez que hay cambios
+        sustanciales. Proponer revisión anual no es inventar una exigencia: es quedarse por encima
+        de una que ya alguien consideró razonable.
+      </p>
+
+      <Cita fuenteId="rd-311-2022" buscar="al menos cada dos años" />
+
+      <p>
+        La segunda parte —que sea obligatorio— es la que sí es una posición y no un dato, y conviene
+        decirlo así. El argumento no es que sin obligación nadie cumpla: es que una auditoría que
+        depende de que alguien la pida voluntariamente se parece poco a la cláusula 9.2, que pide
+        intervalos programados y un proceso formal. Lo programado tiene fecha; lo voluntario,
+        intención.
+      </p>
+
+      <p>
+        Y el costo de la alternativa tampoco es una cifra inventada. Cuando la UBA tuvo su
+        incidente, lo que publicó su propio comunicado fue un cronograma alternativo de inscripción
+        facultad por facultad y la advertencia de que el restablecimiento completo podría llevar
+        «trabajos intensivos que se extiendan durante algunas semanas». Eso es lo que hay detrás de
+        la palabra «continuidad», y es medible.
+      </p>
+
+      <p class="tesis__matiz">
+        Queda una objeción honesta: nada de lo anterior demuestra que auditar prevenga. La revisión
+        sistemática peruana que revisé dice que la elección del marco «puede impactar de manera
+        importante» en la capacidad de detectar riesgos. <em>Puede</em>. Este ensayo defiende que
+        merece la pena, no que está garantizado.
+      </p>
+    </div>
+
+    <aside class="tesis__lado">
+      <Figura
+        nombre="informe-hallazgos"
+        fig="10"
+        ancho={620}
+        alt="Vista cenital de un informe impreso con una mano sosteniendo un bolígrafo sobre un escritorio blanco"
+        pie="El producto de una auditoría es un dictamen con hallazgos, no una sensación."
+      />
+
+      <div class="firma">
+        <p class="mono">Firma</p>
+        <p class="firma__nombres">Antonio Mena · Akim Felipe</p>
+        <p class="firma__nota">
+          Estudiantes de Ingeniería de Sistemas, Universidad César Vallejo. Este texto no representa
+          a la institución ni afirma nada sobre el estado de seguridad de sus sistemas.
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="cierre">
+    <Figura
+      nombre="campus-andino"
+      fig="11"
+      ancho={1400}
+      alt="Fachada de un campus andino: muro de piedra clara y pared encalada con una ventana de madera azul"
+      pie="Cada universidad es, además de su campus, un conjunto de sistemas que nadie fotografía."
+    />
+    <div class="cierre__grid">
+      <div>
+        <h3 class="display cierre__titulo">Cómo se hizo este documento</h3>
+        <p>
+          Cada afirmación se buscó hasta su emisor original. Cuando la cadena de citas llevaba a una
+          fuente primaria, se citó la primaria. Cuando no existía, la afirmación salió del texto:
+          once de ellas salieron, y están listadas arriba.
+        </p>
+        <p>
+          Doce de las dieciocho fuentes se leyeron en vivo; seis necesitaron una copia archivada
+          porque el sitio bloqueaba clientes automáticos, y eso se indica en cada ficha.
+        </p>
+      </div>
+      <div class="cierre__no">
+        <p class="mono cierre__no-titulo">
+          <Icon nombre="circle-alert" tam={15} />
+          Marcas que no usamos, a propósito
+        </p>
+        <ul>
+          {
+            marcasNoUsadas.map((m) => (
+              <li>
+                <strong>{m.nombre}</strong>
+                <span>{m.porque}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</Seccion>
+
+<style>
+  .tesis {
+    display: grid;
+    grid-template-columns: 1.35fr 0.85fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .tesis__afirmacion {
+    font-size: clamp(1.5rem, 3vw, 2.3rem);
+    line-height: 1.16;
+    letter-spacing: -0.028em;
+    max-width: 30ch;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid var(--tinta);
+  }
+
+  .tesis__afirmacion em {
+    font-style: italic;
+    color: var(--ac-hondo);
+  }
+
+  .tesis__cuerpo p {
+    font-size: var(--fs-5);
+    line-height: 1.75;
+    color: var(--tinta-media);
+    max-width: 62ch;
+  }
+
+  .tesis__cuerpo p + p {
+    margin-top: 1.1rem;
+  }
+
+  .tesis__cuerpo :global(.cita) {
+    margin-block: 1.6rem;
+  }
+
+  .tesis__matiz {
+    margin-top: 1.5rem !important;
+    padding: 1.1rem 1.2rem;
+    background: var(--ac-lavanda);
+    border-left: 2px solid var(--ac);
+    color: var(--tinta) !important;
+  }
+
+  .tesis__matiz em {
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .tesis__lado {
+    position: sticky;
+    top: 96px;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .firma {
+    border-top: 1px solid var(--linea);
+    padding-top: 1.1rem;
+  }
+
+  .firma__nombres {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    margin-top: 0.4rem;
+  }
+
+  .firma__nota {
+    margin-top: 0.6rem;
+    font-size: var(--fs-7) !important;
+    line-height: 1.6;
+    color: var(--tinta-baja) !important;
+  }
+
+  .cierre {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .cierre__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .cierre__titulo {
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    margin-bottom: 0.9rem;
+  }
+
+  .cierre p {
+    font-size: var(--fs-6);
+    line-height: 1.72;
+    color: var(--tinta-media);
+    max-width: 56ch;
+  }
+
+  .cierre p + p {
+    margin-top: 0.9rem;
+  }
+
+  .cierre__no-titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--ac);
+    margin-bottom: 0.9rem;
+  }
+
+  .cierre__no ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--linea);
+  }
+
+  .cierre__no li {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .cierre__no strong {
+    font-size: var(--fs-6);
+  }
+
+  .cierre__no span {
+    font-size: var(--fs-7);
+    line-height: 1.6;
+    color: var(--tinta-baja);
+  }
+
+  @media (max-width: 900px) {
+    .tesis,
+    .cierre__grid {
+      grid-template-columns: 1fr;
+    }
+    .tesis__lado {
+      position: static;
+    }
+  }
+</style>

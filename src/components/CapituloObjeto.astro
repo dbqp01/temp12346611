@@ -1,0 +1,403 @@
+---
+import Seccion from './Seccion.astro';
+import Cita from './Cita.astro';
+import Icon from './Icon.astro';
+import Figura from './Figura.astro';
+
+const sumario = [
+  {
+    n: '01',
+    cabeza: 'El objeto existe y está definido',
+    texto:
+      'Un sistema de información académica no es «la plataforma»: es la infraestructura que captura, guarda y devuelve el dato académico. Tiene definición y tiene marco de auditoría.',
+    icono: 'database' as const,
+  },
+  {
+    n: '02',
+    cabeza: 'La frecuencia es alta y está medida',
+    texto:
+      'El 98 % de las instituciones de educación superior encuestadas en Reino Unido identificó al menos una brecha en doce meses. Base: 49 instituciones, margen ±11,9 pp.',
+    icono: 'activity' as const,
+  },
+  {
+    n: '03',
+    cabeza: 'El vector es mundane, no cinematográfico',
+    texto:
+      'El 96 % de las afectadas señala phishing. No hay exploit exótico: hay un correo, un enlace y una contraseña reutilizada.',
+    icono: 'key-round' as const,
+  },
+  {
+    n: '04',
+    cabeza: 'El método no lo inventa nadie',
+    texto:
+      'ISO/IEC 27001 fija qué se gestiona, ISO 19011 cómo se audita, NIST CSF 2.0 qué resultados se esperan, y COBIT 5 se ha aplicado ya a un sistema académico peruano.',
+    icono: 'network' as const,
+  },
+  {
+    n: '05',
+    cabeza: 'La periodicidad tiene precedente legal',
+    texto:
+      'En España la auditoría ordinaria es al menos cada dos años, más una extraordinaria ante cambios sustanciales. Proponer revisión anual es ser más exigente que el mínimo.',
+    icono: 'calendar-clock' as const,
+  },
+];
+
+const componentes = [
+  { nombre: 'Admisión', detalle: 'postulantes y puntajes', icono: 'users' as const },
+  { nombre: 'Matrícula', detalle: 'matrícula, ciclos y horarios', icono: 'graduation-cap' as const },
+  { nombre: 'Notas', detalle: 'actas y promedios', icono: 'file-text' as const },
+  { nombre: 'Pagos', detalle: 'aranceles y deudas', icono: 'shield-check' as const },
+  { nombre: 'Biblioteca', detalle: 'préstamos y recursos', icono: 'search' as const },
+  { nombre: 'Registros', detalle: 'quién hizo qué, cuándo', icono: 'network' as const },
+];
+
+const dentro = [
+  {
+    tipo: 'Dato académico',
+    ejemplo: 'notas, carreras, ciclos, avance curricular',
+    control: 'Integridad y trazabilidad del acta',
+  },
+  {
+    tipo: 'Dato financiero',
+    ejemplo: 'pagos, deudas, datos de pago en línea',
+    control: 'Confidencialidad y segregación de funciones',
+  },
+  {
+    tipo: 'Dato personal regulado',
+    ejemplo: 'identidad, contacto, a veces salud',
+    control: 'Minimización, cifrado y anonimización',
+  },
+];
+---
+
+<Seccion
+  n="I"
+  capitulo="El objeto"
+  id="objeto"
+  titulo="Antes de auditar hay que saber qué se audita"
+  lead="La versión anterior de este ensayo hablaba de «el sistema» sin definirlo. Un sistema de información académica tiene definición, componentes y responsables — y por eso se puede auditar."
+>
+  <div class="sumario">
+    {
+      sumario.map((s, i) => (
+        <article class="sumario__item" data-reveal style={`--i:${i}`}>
+          <div class="sumario__cabeza">
+            <span class="sumario__icono"><Icon nombre={s.icono} tam={18} /></span>
+            <span class="mono sumario__n">{s.n}</span>
+            <h3>{s.cabeza}</h3>
+          </div>
+          <p>{s.texto}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="banda">
+    <Figura
+      nombre="biblioteca"
+      fig="01"
+      ancho={1400}
+      carga="eager"
+      clase="banda__fig"
+      alt="Sala de lectura de una biblioteca universitaria con mesas largas de madera clara y luz alta por ventanales"
+      pie="El lado visible de la universidad: donde el estudiante cree que termina el sistema."
+    />
+    <Figura
+      nombre="laboratorio-computo"
+      fig="02"
+      ancho={900}
+      clase="banda__fig"
+      alt="Sala de cómputo universitaria con una fila de monitores oscuros y luz de ventana a contraluz"
+      pie="El lado que ya no se ve: el punto donde la matrícula deja de ser un trámite y pasa a ser un registro."
+    />
+  </div>
+
+  <div class="componentes">
+    <div class="componentes__texto">
+      <h3 class="subtitulo display">Qué es un sistema de información académica</h3>
+      <p>
+        La definición la toma este ensayo de un trabajo peruano que auditaron exactamente ese objeto,
+        en una universidad pública, con COBIT 5:
+      </p>
+      <Cita
+        fuenteId="aquino-2023"
+        buscar="plataforma informática de trabajo"
+        variante="grande"
+      />
+      <p class="nota">
+        Nótese lo que la definición incluye: captura, almacenamiento, procesamiento, acceso y salida.
+        Cinco verbos, cinco superficies donde algo puede fallar.
+      </p>
+    </div>
+
+    <ul class="componentes__lista">
+      {
+        componentes.map((c, i) => (
+          <li data-reveal style={`--i:${i}`}>
+            <Icon nombre={c.icono} tam={20} />
+            <span class="componentes__nombre">{c.nombre}</span>
+            <span class="componentes__detalle">{c.detalle}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="perimetro">
+    <div class="perimetro__grid">
+      <div>
+        <h3 class="subtitulo display">Qué hay dentro del perímetro</h3>
+        <p class="perimetro__lead">
+          La razón por la que una universidad es un blanco razonable no es el misterio ni el drama: es
+          la variedad de dato que acumula por naturaleza.
+        </p>
+        <Cita fuenteId="microsoft-2024" buscar="industria de industrias" />
+      </div>
+      <table class="perimetro__tabla">
+        <caption class="oculto-lector">
+          Tipos de dato presentes en un sistema académico y su control principal
+        </caption>
+        <thead>
+          <tr><th>Tipo de dato</th><th>Ejemplo</th><th>Control que responde</th></tr>
+        </thead>
+        <tbody>
+          {
+            dentro.map((d, i) => (
+              <tr data-reveal style={`--i:${i}`}>
+                <th scope="row">{d.tipo}</th>
+                <td>{d.ejemplo}</td>
+                <td>{d.control}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <Figura
+      nombre="portal-telefono"
+      fig="03"
+      ancho={1000}
+      carga="lazy"
+      alt="Manos de una estudiante sosteniendo un teléfono sobre un escritorio claro"
+      pie="El trámite cotidiano: un acceso, una sesión abierta, una contraseña. Todo lo demás de esta página trata de quién lo revisa."
+    />
+  </div>
+</Seccion>
+
+<style>
+  .sumario {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .sumario__item {
+    background: var(--papel);
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    transition: background-color var(--d-2) var(--ease-out);
+  }
+
+  .sumario__item:hover {
+    background: var(--ac-lavanda);
+  }
+
+  .sumario__cabeza {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .sumario__icono {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--ac-borde);
+    border-radius: 3px;
+    color: var(--ac);
+  }
+
+  .sumario__n {
+    color: var(--tinta-apagada);
+  }
+
+  .sumario__cabeza h3 {
+    font-size: var(--fs-5);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+  }
+
+  .sumario__item p {
+    font-size: var(--fs-6);
+    line-height: 1.65;
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+
+  .subtitulo {
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    margin-bottom: 0.9rem;
+  }
+
+  .banda {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    align-items: start;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--linea);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .componentes {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .componentes__texto p {
+    font-size: var(--fs-5);
+    line-height: 1.7;
+    color: var(--tinta-media);
+    max-width: 52ch;
+  }
+
+  .componentes__texto :global(.cita) {
+    margin-block: 1.5rem;
+  }
+
+  .nota {
+    margin-top: 1.25rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--ac-borde);
+    font-size: var(--fs-6) !important;
+    color: var(--tinta-baja) !important;
+  }
+
+  .componentes__lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+  }
+
+  .componentes__lista li {
+    background: var(--papel);
+    padding: 1.1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.6rem;
+    row-gap: 0.15rem;
+  }
+
+  .componentes__lista svg {
+    grid-row: 1 / span 2;
+    color: var(--ac);
+    margin-top: 0.15rem;
+  }
+
+  .componentes__nombre {
+    font-size: var(--fs-5);
+    font-weight: 700;
+  }
+
+  .componentes__detalle {
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+    line-height: 1.5;
+  }
+
+  .perimetro {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .perimetro__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .perimetro__lead {
+    font-size: var(--fs-5);
+    line-height: 1.7;
+    color: var(--tinta-media);
+    max-width: 46ch;
+    margin-bottom: 1.5rem;
+  }
+
+  .perimetro__tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-6);
+  }
+
+  .perimetro__tabla th,
+  .perimetro__tabla td {
+    text-align: left;
+    padding: 0.9rem 0.7rem 0.9rem 0;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .perimetro__tabla thead th {
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--tinta-apagada);
+    border-bottom: 2px solid var(--tinta);
+    padding-bottom: 0.5rem;
+  }
+
+  .perimetro__tabla tbody th {
+    font-weight: 700;
+    color: var(--tinta);
+    width: 32%;
+  }
+
+  .perimetro__tabla td {
+    color: var(--tinta-media);
+  }
+
+  .perimetro__tabla tbody tr {
+    transition: background-color var(--d-2) var(--ease-out);
+  }
+
+  .perimetro__tabla tbody tr:hover {
+    background: var(--ac-lavanda);
+  }
+
+  .perimetro :global(.fig) {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    max-width: 46rem;
+  }
+
+  @media (max-width: 860px) {
+    .componentes,
+    .perimetro__grid,
+    .banda {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

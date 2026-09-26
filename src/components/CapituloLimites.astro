@@ -1,0 +1,255 @@
+---
+import Seccion from './Seccion.astro';
+import Cita from './Cita.astro';
+import Icon from './Icon.astro';
+import Figura from './Figura.astro';
+import { limites, correcciones } from '../data/ensayo';
+
+const etiquetaProblema: Record<string, string> = {
+  inventado: 'no existía',
+  'no verificable': 'sin fuente',
+  'mal atribuido': 'atribución incorrecta',
+  exagerado: 'exagerado',
+  roto: 'enlace roto',
+};
+---
+
+<Seccion
+  n="IV"
+  capitulo="Los límites"
+  id="limites"
+  titulo="Lo que una auditoría no puede afirmar"
+  lead="Esta es la sección más importante del documento, y es la más fácil de escribir mal. Los límites no los pone este ensayo: los pone cada fuente sobre su propio alcance. Respetarlos es lo que distingue un análisis de una advertencia."
+>
+  <div class="limites">
+    {
+      limites.map((l, i) => (
+        <article class="limite" data-reveal style={`--i:${i}`}>
+          <div class="limite__cabeza">
+            <Icon nombre="minus" tam={16} />
+            <h3>{l.quien}</h3>
+          </div>
+          <Cita fuenteId={l.cita.fuenteId} buscar={l.cita.texto.slice(0, 40)} variante="fila" />
+          <p class="limite__implica">{l.implica}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="descargo">
+    <Figura
+      nombre="revista-abierta"
+      fig="09"
+      ancho={760}
+      alt="Revista académica abierta sobre una mesa blanca, con gafas y lápiz"
+      pie="Verificar una fuente es leerla entera, incluido el párrafo donde dice hasta dónde llega."
+    />
+    <div class="descargo__texto">
+      <h3 class="display descargo__titulo">Un número sin su denominador es un adjetivo</h3>
+      <p>
+        La versión anterior de esta página afirmaba que «el 43 % de las universidades británicas
+        reportaba brechas cada semana» y que Microsoft lo había medido. Al ir a la fuente resultaron
+        tres errores distintos en una sola frase: Microsoft no midió nada, la población no eran «las
+        universidades» y el 43 % se calculaba solo sobre las instituciones que ya habían sufrido un
+        incidente — treinta entidades, con un margen de error de ±8 a 14 puntos.
+      </p>
+      <p class="descargo__final">
+        Ninguna de esas tres cosas aparece en el titular de ninguna fuente. Aparecen en el anexo
+        metodológico, tres párrafos después del número. Ese es exactamente el trabajo de auditar:
+        leer el anexo.
+      </p>
+    </div>
+  </div>
+
+  <div class="correcciones">
+    <header class="correcciones__cabeza">
+      <h3 class="display">Registro de verificación</h3>
+      <p>
+        Qué se cayó de la versión anterior y por qué. Se publica porque un trabajo académico que
+        corrige sus propios datos sin decirlo no está corrigiendo: está reescribiendo.
+      </p>
+    </header>
+
+    <ol class="correcciones__lista">
+      {
+        correcciones.map((c, i) => (
+          <li class="corr" data-reveal style={`--i:${i}`}>
+            <span class="corr__n mono">{String(i + 1).padStart(2, '0')}</span>
+            <div class="corr__cuerpo">
+              <p class="corr__antes">
+                <span class="corr__tag" data-problema={c.problema}>
+                  {etiquetaProblema[c.problema]}
+                </span>
+                <s>{c.antes}</s>
+              </p>
+              <p class="corr__ahora">{c.ahora}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Seccion>
+
+<style>
+  .limites {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .limite {
+    background: var(--papel);
+    padding: clamp(1.2rem, 2.2vw, 1.6rem);
+    display: grid;
+    align-content: start;
+    gap: 0.9rem;
+  }
+
+  .limite__cabeza {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .limite__cabeza svg {
+    color: var(--ac);
+    flex: none;
+  }
+
+  .limite__cabeza h3 {
+    font-size: var(--fs-5);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .limite__implica {
+    font-size: var(--fs-7);
+    line-height: 1.65;
+    color: var(--tinta-baja);
+    padding-top: 0.7rem;
+    border-top: 1px dotted var(--linea);
+  }
+
+  .descargo {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .descargo__titulo {
+    font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+    max-width: 18ch;
+    margin-bottom: 1rem;
+  }
+
+  .descargo__texto p {
+    font-size: var(--fs-5);
+    line-height: 1.72;
+    color: var(--tinta-media);
+    max-width: 60ch;
+  }
+
+  .descargo__texto p + p {
+    margin-top: 1rem;
+  }
+
+  .descargo__final {
+    color: var(--tinta) !important;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--ac);
+  }
+
+  .correcciones {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 3px solid var(--tinta);
+  }
+
+  .correcciones__cabeza {
+    max-width: 72ch;
+    margin-bottom: 2rem;
+  }
+
+  .correcciones__cabeza h3 {
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+  }
+
+  .correcciones__cabeza p {
+    margin-top: 0.8rem;
+    font-size: var(--fs-6);
+    line-height: 1.7;
+    color: var(--tinta-media);
+  }
+
+  .correcciones__lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--linea);
+  }
+
+  .corr {
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    gap: 1.25rem;
+    padding: 1.2rem 0.6rem 1.2rem 0;
+    border-bottom: 1px solid var(--linea);
+    transition: background-color var(--d-2) var(--ease-out), padding-left var(--d-2) var(--ease-out);
+  }
+
+  .corr:hover {
+    background: var(--ac-lavanda);
+    padding-left: 0.6rem;
+  }
+
+  .corr__n {
+    padding-top: 0.2rem;
+    color: var(--ac);
+  }
+
+  .corr__antes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--fs-6);
+    color: var(--tinta-baja);
+  }
+
+  .corr__antes s {
+    text-decoration-color: var(--ac);
+    text-decoration-thickness: 1px;
+  }
+
+  .corr__tag {
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--ac-borde);
+    border-radius: 2px;
+    padding: 0.12rem 0.4rem;
+    color: var(--ac);
+    white-space: nowrap;
+  }
+
+  .corr__ahora {
+    margin-top: 0.5rem;
+    font-size: var(--fs-6);
+    line-height: 1.65;
+    color: var(--tinta-media);
+    max-width: 78ch;
+  }
+
+  @media (max-width: 860px) {
+    .descargo {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

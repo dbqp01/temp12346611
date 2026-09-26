@@ -1,0 +1,621 @@
+---
+import Seccion from './Seccion.astro';
+import Cita from './Cita.astro';
+import Icon from './Icon.astro';
+import Figura from './Figura.astro';
+import { fases } from '../data/ensayo';
+
+const pasos = [
+  {
+    n: '01',
+    clave: 'puerta',
+    eyebrow: 'Paso 01 · quién entra',
+    titulo: 'Dos puertas, una identidad',
+    texto:
+      'Estudiantes y docentes entran al mismo portal por la misma puerta. El control no es la puerta: es saber qué puede hacer cada identidad después de pasarla, y quién la gestiona.',
+    cita: { fuente: 'nist-csf', buscar: 'PR.AA-01' },
+  },
+  {
+    n: '02',
+    clave: 'permiso',
+    eyebrow: 'Paso 02 · qué se revisa',
+    titulo: 'El permiso, no la persona',
+    texto:
+      'Auditar es comparar el permiso asignado contra el trabajo real. La norma lo pide con dos principios concretos: mínimo privilegio y separación de funciones.',
+    cita: { fuente: 'nist-csf', buscar: 'least privilege' },
+  },
+  {
+    n: '03',
+    clave: 'dato',
+    eyebrow: 'Paso 03 · qué se toca',
+    titulo: 'El dato y su rastro',
+    texto:
+      'Detrás del portal hay dos cosas distintas: la base donde vive el dato personal y el registro que permite reconstruir qué pasó. Una sin la otra no es auditable.',
+    cita: { fuente: 'dsit-2026', buscar: 'not protected by techniques' },
+  },
+  {
+    n: '04',
+    clave: 'cadencia',
+    eyebrow: 'Paso 04 · con qué frecuencia',
+    titulo: 'Intervalos, no emergencias',
+    texto:
+      'La periodicidad no es una opinión. La cláusula 9.2 pide auditorías internas a intervalos programados, y el precedente legal español fija un máximo de dos años entre auditorías ordinarias.',
+    cita: { fuente: 'tuv-2024', buscar: 'internal audits at scheduled intervals' },
+  },
+];
+
+const protocolo = [
+  {
+    titulo: 'Mapear el perímetro',
+    texto:
+      'Listar sistemas, responsables y rutas de acceso del ciclo académico completo: admisión, matrícula, notas, pagos, biblioteca.',
+    icono: 'scan-line' as const,
+  },
+  {
+    titulo: 'Comparar permisos contra trabajo real',
+    texto:
+      'Cada rol que existe debería justificarse con una función que lo necesite. Lo que no se justifica, se retira.',
+    icono: 'key-round' as const,
+  },
+  {
+    titulo: 'Exigir autenticación en dos pasos',
+    texto:
+      'Es el control con mejor relación costo-efecto documentada: una cuenta con MFA es más del 99,9 % menos propensa a comprometerse.',
+    icono: 'shield-check' as const,
+  },
+  {
+    titulo: 'Documentar el hallazgo como decisión',
+    texto:
+      'Un hallazgo sin responsable y sin fecha no es un hallazgo: es una nota. El informe debe cerrar con medidas correctoras.',
+    icono: 'file-text' as const,
+  },
+];
+---
+
+<Seccion
+  n="III"
+  capitulo="El método"
+  id="metodo"
+  titulo="El método se recorre, no se promete"
+  lead="Lo que sigue no es una opinión del autor sobre cómo debería auditarse una universidad: es el ciclo que publican la norma y la literatura académica, recorrido sobre un sistema académico genérico."
+>
+  <div class="scrolly">
+    <div class="pasos">
+      {
+        pasos.map((p) => (
+          <article class="paso" data-paso={p.clave} data-numero={p.n}>
+            <p class="paso__eyebrow mono">
+              <i aria-hidden="true"></i>
+              {p.eyebrow}
+            </p>
+            <h3 class="paso__titulo display">{p.titulo}</h3>
+            <p class="paso__texto">{p.texto}</p>
+            <Cita fuenteId={p.cita.fuente} buscar={p.cita.buscar} variante="fila" clase="paso__cita" />
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="lienzo">
+      <figure class="lienzo__caja">
+        <div class="lienzo__cabeza mono">
+          <span>Fig. 06 · diagrama del método</span>
+          <span id="flujo-contador" aria-live="polite">— / 04</span>
+        </div>
+
+        <svg id="flujo" class="flujo" viewBox="0 0 460 350" role="img" aria-label="Sistema de información académica con sus puntos de control: usuarios, puerta de acceso, portal, base de datos y registro">
+          <defs>
+            <marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0L10 5L0 10z" fill="currentColor" />
+            </marker>
+          </defs>
+
+          <g id="anillo" class="anillo">
+            <rect x="1" y="9" width="458" height="332" rx="7" />
+            <text class="anillo__texto" x="229" y="24" text-anchor="middle">
+              INTERVALOS PROGRAMADOS · CLAÚSULA 9.2 / MÁXIMO 2 AÑOS
+            </text>
+          </g>
+
+          <g id="n-alumno" class="no">
+            <rect x="6" y="44" width="108" height="42" rx="2" />
+            <text class="no__t" x="17" y="63">ESTUDIANTE</text>
+            <text class="no__s" x="17" y="76">usuario final</text>
+          </g>
+          <g id="n-docente" class="no">
+            <rect x="6" y="252" width="108" height="42" rx="2" />
+            <text class="no__t" x="17" y="271">DOCENTE</text>
+            <text class="no__s" x="17" y="284">usuario final</text>
+          </g>
+
+          <path id="a-puerta-1" class="arista" pathLength="100" d="M114 65H142V166H158" />
+          <path id="a-puerta-2" class="arista" pathLength="100" d="M114 273H142V178H158" />
+
+          <g id="n-puerta" class="no">
+            <rect x="160" y="148" width="112" height="48" rx="2" />
+            <text class="no__t" x="172" y="170">PUERTA</text>
+            <text class="no__s" x="172" y="184">identidad · sesión</text>
+          </g>
+
+          <path id="a-portal" class="arista" pathLength="100" d="M272 172H324" />
+
+          <g id="n-portal" class="no">
+            <rect x="326" y="148" width="122" height="48" rx="2" />
+            <text class="no__t" x="338" y="170">PORTAL</text>
+            <text class="no__s" x="338" y="184">matrícula · notas · pagos</text>
+          </g>
+
+          <path id="a-registro" class="arista" pathLength="100" d="M387 148V86" />
+          <path id="a-base" class="arista" pathLength="100" d="M387 196V250" />
+
+          <g id="n-registro" class="no">
+            <rect x="326" y="40" width="122" height="42" rx="2" />
+            <text class="no__t" x="338" y="59">REGISTRO</text>
+            <text class="no__s" x="338" y="72">trazabilidad</text>
+          </g>
+          <g id="n-base" class="no">
+            <rect x="326" y="254" width="122" height="42" rx="2" />
+            <text class="no__t" x="338" y="273">BASE</text>
+            <text class="no__s" x="338" y="286">dato personal</text>
+          </g>
+
+          <text id="etiqueta-praa" class="etiqueta" x="298" y="140" text-anchor="middle">PR.AA-05</text>
+          <text id="etiqueta-decm" class="etiqueta" x="387" y="32" text-anchor="middle">DE.CM-01</text>
+          <text id="etiqueta-cifrado" class="etiqueta" x="387" y="312" text-anchor="middle">49 % SIN CIFRAR</text>
+
+          <circle id="paquete-1" class="paquete" r="3.4" style="offset-path: path('M114 65H142V166H158')" />
+          <circle id="paquete-2" class="paquete" r="3.4" style="offset-path: path('M114 273H142V178H158')" />
+          <circle id="paquete-3" class="paquete" r="3.4" style="offset-path: path('M272 172H324')" />
+        </svg>
+
+        <figcaption class="lienzo__pie">
+          Esquema del método sobre un sistema académico genérico. No es telemetría ni una medición de
+          la UCV: son los puntos que una auditoría revisa, con su referencia normativa.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="fases">
+    <div class="fases__cabeza">
+      <div>
+        <h3 class="fases__titulo display">El ciclo completo, en cinco fases</h3>
+        <p class="fases__lead">
+          Tomado literalmente de la literatura de auditoría informática, no resumido de memoria:
+        </p>
+      </div>
+      <Figura
+        nombre="sala-servidores"
+        fig="07"
+        ancho={520}
+        alt="Pasillo limpio de una sala de servidores universitaria con gabinetes bajos y luz de ventana"
+        pie="El lugar físico donde vive un sistema que casi nadie identifica cuando dice «la universidad»."
+      />
+    </div>
+    <ol class="fases__lista">
+      {
+        fases.map((f, i) => (
+          <li class="fase" data-reveal style={`--i:${i}`}>
+            <span class="fase__n display">{f.n}</span>
+            <h4>{f.titulo}</h4>
+            <p>{f.que}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <Cita fuenteId="leon-acurio-2024" buscar="El objetivo principal del estudio" variante="fila" clase="fases__cita" />
+  </div>
+
+  <div class="protocolo">
+    <div class="protocolo__cabeza">
+      <h3 class="fases__titulo display">Qué le pediría yo a mi universidad</h3>
+      <p class="mono protocolo__aviso">
+        propuesta del autor · derivada de los controles anteriores, no copiada de ninguna norma
+      </p>
+    </div>
+    <div class="protocolo__grid">
+      {
+        protocolo.map((p, i) => (
+          <article class="acc" data-reveal style={`--i:${i}`}>
+            <span class="acc__icono"><Icon nombre={p.icono} tam={19} /></span>
+            <h4>{p.titulo}</h4>
+            <p>{p.texto}</p>
+          </article>
+        ))
+      }
+    </div>
+    <div class="protocolo__fig">
+      <Figura
+        nombre="auditoria-escritorio"
+        fig="08"
+        ancho={1400}
+        alt="Vista cenital de un escritorio con listas impresas, un portátil abierto y dos manos revisando una fila"
+        pie="Auditar es, casi todo el tiempo, esto: dos personas comparando una lista contra la realidad."
+      />
+    </div>
+  </div>
+</Seccion>
+
+<style>
+  .scrolly {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .paso {
+    padding-block: clamp(2rem, 5vh, 3.2rem);
+    border-bottom: 1px solid var(--linea);
+    opacity: 0.32;
+    transition: opacity 0.5s var(--ease-out);
+  }
+
+  .paso:last-child {
+    border-bottom: 0;
+  }
+
+  .paso.activo {
+    opacity: 1;
+  }
+
+  .paso__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .paso__eyebrow i {
+    width: 18px;
+    height: 1px;
+    background: var(--ac);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .paso.activo .paso__eyebrow i {
+    transform: scaleX(1);
+  }
+
+  .paso__titulo {
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    margin-block: 0.5rem 0.6rem;
+  }
+
+  .paso__texto {
+    font-size: var(--fs-5);
+    line-height: 1.7;
+    color: var(--tinta-media);
+    max-width: 44ch;
+  }
+
+  .paso__cita {
+    margin-top: 1.1rem;
+  }
+
+  .lienzo {
+    position: sticky;
+    top: 88px;
+    align-self: start;
+  }
+
+  .lienzo__caja {
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    background: var(--papel-bajo);
+    padding: clamp(1rem, 2vw, 1.4rem);
+    margin: 0;
+  }
+
+  .lienzo__cabeza {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .lienzo__pie {
+    margin-top: 0.9rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid #dfe3ef;
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    line-height: 1.75;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+  }
+
+  /* --- estados del diagrama --- */
+  .flujo {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .no rect {
+    fill: #fff;
+    stroke: #c9cede;
+    stroke-width: 1.2;
+    transition: stroke 0.45s var(--ease-out);
+  }
+
+  .no__t {
+    fill: var(--tinta-media);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    transition: fill 0.45s var(--ease-out);
+  }
+
+  .no__s {
+    fill: var(--tinta-apagada);
+    font-family: var(--mono);
+    font-size: 7.2px;
+    letter-spacing: 0.04em;
+  }
+
+  .no.activo rect {
+    stroke: var(--ac);
+  }
+
+  .no.activo .no__t {
+    fill: var(--tinta);
+  }
+
+  .no.activo {
+    animation: empuje 0.5s var(--ease-out);
+  }
+
+  @keyframes empuje {
+    0% { transform: translateY(0); }
+    38% { transform: translateY(-3px); }
+    100% { transform: translateY(0); }
+  }
+
+  .arista {
+    stroke: #c9cede;
+    stroke-width: 1.4;
+    fill: none;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 0.9s var(--ease-out), stroke 0.45s var(--ease-out);
+  }
+
+  .arista.activo {
+    stroke-dashoffset: 0;
+    stroke: var(--ac);
+  }
+
+  .etiqueta {
+    font-family: var(--mono);
+    font-size: 6.6px;
+    letter-spacing: 0.07em;
+    fill: var(--tinta-apagada);
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-out);
+  }
+
+  .etiqueta.activo {
+    opacity: 1;
+    fill: var(--ac);
+  }
+
+  .paquete {
+    fill: var(--ac);
+    opacity: 0;
+    offset-rotate: 0deg;
+  }
+
+  .paquete.activo {
+    opacity: 1;
+    animation: viajar 2.1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  @keyframes viajar {
+    0% { offset-distance: 0%; opacity: 0; }
+    12% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  .anillo rect {
+    fill: none;
+    stroke: var(--ac);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .anillo__texto {
+    font-family: var(--mono);
+    font-size: 6.4px;
+    letter-spacing: 0.1em;
+    fill: var(--ac);
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .anillo.activo rect,
+  .anillo.activo .anillo__texto {
+    opacity: 1;
+  }
+
+  /* --- fases --- */
+  .fases {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .fases__cabeza {
+    display: grid;
+    grid-template-columns: 1.4fr 0.6fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .fases__titulo {
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    max-width: 24ch;
+  }
+
+  .fases__lead {
+    margin-top: 0.7rem;
+    font-size: var(--fs-5);
+    color: var(--tinta-media);
+    max-width: 62ch;
+  }
+
+  .fases__lista {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+    counter-reset: fase;
+  }
+
+  .fase {
+    background: var(--papel);
+    padding: 1.15rem 1rem 1.3rem;
+    position: relative;
+  }
+
+  .fase::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--ac);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.7s var(--ease-out) calc(var(--i, 0) * 120ms);
+  }
+
+  .fase.revelado::after {
+    transform: scaleX(1);
+  }
+
+  .fase__n {
+    font-size: 1.6rem;
+    color: var(--ac);
+    line-height: 1;
+  }
+
+  .fase h4 {
+    font-size: var(--fs-5);
+    font-weight: 700;
+    margin-block: 0.5rem 0.4rem;
+  }
+
+  .fase p {
+    font-size: var(--fs-7);
+    line-height: 1.6;
+    color: var(--tinta-media);
+  }
+
+  .fases__cita {
+    margin-top: 1.75rem;
+  }
+
+  /* --- protocolo --- */
+  .protocolo {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .protocolo__cabeza {
+    margin-bottom: 1.75rem;
+  }
+
+  .protocolo__aviso {
+    margin-top: 0.6rem;
+    color: var(--ac);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .protocolo__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+  }
+
+  .protocolo__fig {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    max-width: 62rem;
+  }
+
+  .acc {
+    background: var(--papel);
+    padding: 1.3rem;
+    transition: background-color var(--d-2) var(--ease-out);
+  }
+
+  .acc:hover {
+    background: var(--ac-lavanda);
+  }
+
+  .acc__icono {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--ac-borde);
+    border-radius: 3px;
+    color: var(--ac);
+    margin-bottom: 0.9rem;
+  }
+
+  .acc h4 {
+    font-size: var(--fs-5);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+
+  .acc p {
+    font-size: var(--fs-7);
+    line-height: 1.65;
+    color: var(--tinta-media);
+  }
+
+  @media (max-width: 940px) {
+    .scrolly {
+      grid-template-columns: 1fr;
+    }
+    .lienzo {
+      position: static;
+      order: -1;
+      margin-bottom: 2rem;
+    }
+    .paso {
+      opacity: 1;
+    }
+    .arista {
+      stroke-dashoffset: 0;
+    }
+    .fases__lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .fases__cabeza {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .fases__lista {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

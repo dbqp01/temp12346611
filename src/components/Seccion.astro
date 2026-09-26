@@ -1,0 +1,73 @@
+---
+type Props = {
+  n: string;
+  capitulo: string;
+  titulo: string;
+  id?: string;
+  lead?: string;
+  clase?: string;
+};
+
+const { n, capitulo, titulo, id, lead, clase } = Astro.props;
+---
+
+<section class={clase} id={id} aria-labelledby={`t-${id ?? n}`}>
+  <header class="cabecera" data-reveal>
+    <div class="cabecera__marca mono">
+      <span>{n}</span>
+      <i aria-hidden="true"></i>
+      <span>{capitulo}</span>
+    </div>
+    <h2 id={`t-${id ?? n}`} class="cabecera__titulo display">{titulo}</h2>
+    {lead && <p class="cabecera__lead">{lead}</p>}
+  </header>
+  <slot />
+</section>
+
+<style>
+  section {
+    padding-block: clamp(3.5rem, 8vw, 6.5rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .cabecera {
+    max-width: 74ch;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .cabecera__marca {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.16em;
+  }
+
+  .cabecera__marca i {
+    width: clamp(1.5rem, 6vw, 4rem);
+    height: 1px;
+    background: var(--ac);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.9s var(--ease-out) 0.15s;
+  }
+
+  .cabecera.revelado .cabecera__marca i {
+    transform: scaleX(1);
+  }
+
+  .cabecera__titulo {
+    font-size: var(--fs-2);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+
+  .cabecera__lead {
+    margin-top: 1rem;
+    max-width: var(--ancho-texto);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+</style>

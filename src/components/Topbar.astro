@@ -1,0 +1,204 @@
+---
+import ucv from '../assets/marks/ucv.svg?url';
+
+const secciones = [
+  { id: 'objeto', n: 'I', nombre: 'El objeto' },
+  { id: 'evidencia', n: 'II', nombre: 'La evidencia' },
+  { id: 'metodo', n: 'III', nombre: 'El método' },
+  { id: 'limites', n: 'IV', nombre: 'Los límites' },
+  { id: 'tesis', n: 'V', nombre: 'La tesis' },
+  { id: 'fuentes', n: 'VI', nombre: 'Fuentes' },
+];
+---
+
+<div class="progreso" id="progreso" role="presentation" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar__inner contenedor">
+    <a class="marca" href="#inicio" aria-label="Universidad César Vallejo — volver al inicio">
+      <img src={ucv} alt="" width="104" height="37" />
+      <span class="marca__texto">
+        Auditoría de sistemas<br />
+        de información académica
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Capítulos del ensayo">
+      <ul>
+        {
+          secciones.map((s) => (
+            <li>
+              <a href={`#${s.id}`} data-nav={s.id}>
+                <span class="nav__n">{s.n}</span>
+                {s.nombre}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <p class="edicion mono">
+      2026-II<span class="punto" aria-hidden="true"></span>18 fuentes
+    </p>
+  </div>
+</header>
+
+<style>
+  .progreso {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--ac);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    z-index: var(--z-progreso);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-top);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .topbar__inner {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2rem);
+    min-height: 66px;
+    padding-block: 0.6rem;
+  }
+
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex: none;
+  }
+
+  .marca img {
+    height: 26px;
+    width: auto;
+  }
+
+  .marca__texto {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tinta-baja);
+    border-left: 1px solid var(--linea);
+    padding-left: 0.8rem;
+  }
+
+  .nav {
+    margin-left: auto;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: clamp(0.6rem, 1.8vw, 1.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+    padding: 0.35rem 0;
+    position: relative;
+    transition: color var(--d-2) var(--ease-out);
+  }
+
+  .nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--ac);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform var(--d-2) var(--ease-out);
+  }
+
+  .nav a:hover,
+  .nav a:focus-visible {
+    color: var(--tinta);
+  }
+
+  .nav a:hover::after,
+  .nav a:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: 0 50%;
+  }
+
+  .nav a.activo {
+    color: var(--ac);
+  }
+
+  .nav a.activo::after {
+    transform: scaleX(1);
+    transform-origin: 0 50%;
+  }
+
+  .nav__n {
+    color: var(--ac);
+    font-weight: 500;
+  }
+
+  .edicion {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+    white-space: nowrap;
+  }
+
+  .punto {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ac);
+    animation: latido 2.4s ease-in-out infinite;
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.7);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .nav {
+      display: none;
+    }
+    .marca__texto {
+      display: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .edicion {
+      display: none;
+    }
+  }
+</style>

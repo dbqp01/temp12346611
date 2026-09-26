@@ -1,0 +1,199 @@
+---
+import { fuentesPorId, type Cita as TipoCita } from '../data/fuentes';
+import Icon from './Icon.astro';
+
+type Props = {
+  fuenteId: string;
+  /** Fragmento que identifica la cita dentro de la fuente. */
+  buscar: string;
+  /** Sobrescribe el texto si hace falta recortarlo con elipsis. */
+  texto?: string;
+  variante?: 'bloque' | 'grande' | 'fila';
+  clase?: string;
+};
+
+const { fuenteId, buscar, texto, variante = 'bloque', clase } = Astro.props;
+
+const fuente = fuentesPorId.get(fuenteId);
+if (!fuente) throw new Error(`Fuente no encontrada: ${fuenteId}`);
+
+const cita: TipoCita =
+  fuente.citas.find((c) => c.texto.includes(buscar)) ??
+  (() => {
+    throw new Error(`Cita no encontrada en ${fuenteId}: ${buscar}`);
+  })();
+
+const cuerpo = texto ?? cita.texto;
+const lang = cita.idioma === 'en' ? 'en' : 'es';
+const tipoEtiqueta =
+  fuente.tipo === 'norma'
+    ? 'norma'
+    : fuente.tipo === 'academica'
+      ? 'artículo arbitrado'
+      : fuente.tipo === 'oficial'
+        ? 'fuente oficial'
+        : fuente.tipo === 'complementaria'
+          ? 'fuente de empresa'
+          : 'declaración institucional';
+---
+
+<figure class:list={['cita', `cita--${variante}`, clase]} data-reveal>
+  <blockquote class="cita__texto" lang={lang}>
+    <p>{cuerpo}</p>
+  </blockquote>
+
+  <figcaption class="cita__fuente">
+    <div class="cita__org">
+      <span class="cita__tipo mono">{tipoEtiqueta}</span>
+      <strong>{fuente.org}</strong>
+      {fuente.autor && <span class="cita__autor">{fuente.autor}</span>}
+    </div>
+
+    <div class="cita__obra">
+      <cite>{fuente.titulo}</cite>
+      {fuente.medio && <span class="cita__medio"> · {fuente.medio}</span>}
+      <span class="cita__fecha"> · {fuente.fecha}</span>
+    </div>
+
+    <div class="cita__pie">
+      <span class="cita__acceso mono">acceso: {fuente.acceso}</span>
+      <a
+        class="cita__enlace"
+        href={fuente.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Abrir fuente: ${fuente.titulo}`}
+      >
+        leer la fuente <Icon nombre="external-link" tam={14} />
+      </a>
+    </div>
+
+    {
+      cita.nota && (
+        <p class="cita__nota">
+          <Icon nombre="circle-alert" tam={13} />
+          <span>{cita.nota}</span>
+        </p>
+      )
+    }
+  </figcaption>
+</figure>
+
+<style>
+  .cita {
+    border-left: 2px solid var(--ac);
+    padding-left: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .cita__texto p {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.42;
+    letter-spacing: -0.012em;
+    color: var(--tinta);
+    margin: 0 0 0.9rem;
+    text-wrap: pretty;
+  }
+
+  .cita--grande .cita__texto p {
+    font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+    line-height: 1.28;
+    letter-spacing: -0.02em;
+  }
+
+  .cita--fila {
+    border-left-width: 1px;
+    border-left-color: var(--linea);
+  }
+
+  .cita--fila .cita__texto p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  [lang='en'] {
+    font-style: italic;
+  }
+
+  .cita__fuente {
+    display: grid;
+    gap: 0.2rem;
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    line-height: 1.75;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+  }
+
+  .cita__org {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .cita__org strong {
+    color: var(--tinta);
+    font-weight: 500;
+  }
+
+  .cita__tipo {
+    border: 1px solid var(--linea);
+    border-radius: 2px;
+    padding: 0.1rem 0.35rem;
+    color: var(--tinta-baja);
+    white-space: nowrap;
+  }
+
+  .cita__autor {
+    color: var(--tinta-baja);
+  }
+
+  .cita__obra {
+    color: var(--tinta-media);
+  }
+
+  .cita__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+    border-top: 1px dotted var(--linea);
+  }
+
+  .cita__enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ac);
+    border-bottom: 1px solid var(--ac-borde);
+    transition: border-color var(--d-2) var(--ease-out);
+  }
+
+  .cita__enlace:hover {
+    border-color: var(--ac);
+  }
+
+  .cita__nota {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+    color: var(--tinta-baja);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-family: var(--cuerpo);
+    font-size: var(--fs-7);
+    line-height: 1.5;
+  }
+
+  .cita__nota svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--ac);
+  }
+</style>

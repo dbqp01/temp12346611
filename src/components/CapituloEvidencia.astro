@@ -1,0 +1,432 @@
+---
+import Seccion from './Seccion.astro';
+import Cita from './Cita.astro';
+import Icon from './Icon.astro';
+import Figura from './Figura.astro';
+import { metricas, casos, controles, marcas } from '../data/ensayo';
+import { fuentesPorId } from '../data/fuentes';
+import escudoUba from '../assets/marks/uba.svg?url';
+import escudoUnam from '../assets/marks/unam.svg?url';
+
+const marcaArchivo: Record<string, string> = { uba: escudoUba, unam: escudoUnam };
+const marcasPorId = new Map(marcas.map((m) => [m.id, m]));
+const peru = ['aquino-2023', 'burgos-rojas-2024', 'cnsd-peru'].map((id) => fuentesPorId.get(id)!);
+---
+
+<Seccion
+  n="II"
+  capitulo="La evidencia"
+  id="evidencia"
+  titulo="Lo que dicen los datos, con su denominador al lado"
+  lead="Ninguna cifra de esta página aparece sin su base muestral y su margen. Es el criterio con el que se sostiene el tono: cuando el número viene con su tamaño de muestra, el adjetivo sobra."
+>
+  <div class="metricas regla-alta">
+    {
+      metricas.map((m, i) => (
+        <article class="metrica" data-reveal style={`--i:${i % 3}`}>
+          <p class="metrica__valor display">
+            <span data-contador={m.cuenta}>{m.valor}</span>
+            {m.sufijo && <sup>{m.sufijo}</sup>}
+          </p>
+          <p class="metrica__que">{m.que}</p>
+          <p class="metrica__base mono">{m.base}</p>
+          <a class="metrica__ir" href={`#fu-${m.fuenteId}`}>
+            a la fuente <Icon nombre="arrow-up-right" tam={13} />
+          </a>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="bloque">
+    <h3 class="bloque__titulo display">Tres casos, tres formas de contarlos</h3>
+    <p class="bloque__lead">
+      Todos con fuente primaria. El orden importa: primero lo que la institución dijo de sí misma,
+      después lo que una agencia documentó, y al final lo que se pudo verificar a medias.
+    </p>
+
+    <div class="casos">
+      {
+        casos.map((c, i) => (
+          <article class="caso" data-reveal style={`--i:${i}`}>
+            <header class="caso__cabeza">
+              {
+                c.marca && marcaArchivo[c.marca] && (
+                  <img
+                    class="caso__marca"
+                    src={marcaArchivo[c.marca]}
+                    alt={marcasPorId.get(c.marca)?.nombre ?? ''}
+                    width={40}
+                    height={40}
+                  />
+                )
+              }
+              <span class="mono caso__cuando">{c.cuando}</span>
+              <h4>{c.donde}</h4>
+            </header>
+            <p class="caso__hecho">{c.quePaso}</p>
+            <Cita fuenteId={c.cita.fuenteId} buscar={c.cita.texto.slice(0, 42)} variante="fila" />
+            <p class="caso__matiz">
+              <Icon nombre="circle-alert" tam={14} />
+              <span>{c.matiz}</span>
+            </p>
+          </article>
+        ))
+      }
+    </div>
+    <Figura
+      nombre="comunicado-oficial"
+      fig="05"
+      ancho={1400}
+      carga="lazy"
+      clase="caso-fig"
+      alt="Documento institucional con banda azul marino en el encabezado y texto ilegible, sobre una superficie blanca"
+      pie="Los tres casos de arriba no salen de un blog: salen de un comunicado, de un boletín y de el informe de una agencia. Este es el aspecto que tiene una fuente primaria cuando la encuentras."
+    />
+  </div>
+
+  <div class="bloque">
+    <h3 class="bloque__titulo display">Qué exige el método, y dónde está escrito</h3>
+    <div class="controles">
+      <div class="controles__encabezado mono" aria-hidden="true">
+        <span>Control</span><span>Referencia</span><span>Qué dice la fuente</span>
+      </div>
+      {
+        controles.map((c, i) => (
+          <div class="control" data-reveal style={`--i:${i}`}>
+            <div class="control__nombre">
+              <Icon nombre={i === 0 ? 'key-round' : i === 1 ? 'shield-check' : i === 2 ? 'clock-12' : i === 3 ? 'list-checks' : i === 4 ? 'calendar-clock' : 'users'} tam={17} />
+              <span>{c.nombre}</span>
+            </div>
+            <p class="control__ref mono">{c.referencia}</p>
+            <p class="control__dice">{c.dice}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="bloque__nota">
+      ISO, DSIT y TÜV Rheinland se citan en texto y no con sus logotipos: la marca de ISO está
+      registrada y la de TÜV es una certificación que solo puede exhibir el certificado. Ponerlas
+      aquí se leería como un aval que no existe.
+    </p>
+  </div>
+
+  <div class="bloque peru">
+    <div class="peru__texto">
+      <h3 class="bloque__titulo display">Y en el Perú ya hay antecedente</h3>
+      <p>
+        No hace falta importar el problema. Existe un trabajo peruano que auditaron exactamente el
+        objeto de este ensayo —un sistema de información académica, en una universidad pública— con
+        COBIT 5, y una revisión sistemática con autoría peruana y método declarado sobre qué marco
+        conviene. El Estado, además, ya presta capacidad: el Centro Nacional de Seguridad Digital
+        ofrece análisis de vulnerabilidades.
+      </p>
+      <p class="bloque__nota">
+        Ese es el argumento de fondo contra el inmovilismo: no hace falta comprar servidores nuevos.
+        Hace falta ordenar quién entra a qué, y hay con qué hacerlo.
+      </p>
+      <div class="peru__fuentes">
+        {
+          peru.map((f, i) => (
+            <a class="peru__fuente" href={`#fu-${f.id}`} data-reveal style={`--i:${i}`}>
+              <span class="mono">{f.fecha.slice(0, 4)}</span>
+              <strong>{f.org}</strong>
+              <cite>{f.titulo}</cite>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <Figura
+      nombre="muro-cusco"
+      fig="04"
+      ancho={900}
+      alt="Muro de piedra andina que continúa en pared encalada con una ventana de reja azul"
+      pie="Cantería andina y muro colonial en la misma esquina: dos capas, una estructura que sigue de pie porque alguien la revisa."
+    />
+  </div>
+</Seccion>
+
+<style>
+  .metricas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--linea);
+    border-bottom: 1px solid var(--linea);
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .metrica {
+    background: var(--papel);
+    padding: clamp(1.25rem, 2.4vw, 1.7rem);
+    display: grid;
+    align-content: start;
+    gap: 0.15rem;
+  }
+
+  .metrica__valor {
+    font-size: clamp(2.6rem, 5vw, 3.9rem);
+    line-height: 0.86;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.6rem;
+  }
+
+  .metrica__valor sup {
+    font-size: 0.3em;
+    color: var(--ac);
+    top: -0.95em;
+    letter-spacing: 0;
+  }
+
+  .metrica__que {
+    font-size: var(--fs-6);
+    line-height: 1.5;
+    color: var(--tinta-media);
+    max-width: 27ch;
+  }
+
+  .metrica__base {
+    margin-top: 0.7rem;
+    padding-top: 0.6rem;
+    border-top: 1px dotted var(--linea);
+    line-height: 1.65;
+  }
+
+  .metrica__ir {
+    margin-top: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ac);
+  }
+
+  .bloque {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .bloque__titulo {
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    max-width: 24ch;
+  }
+
+  .bloque__lead {
+    margin-top: 0.8rem;
+    max-width: 62ch;
+    font-size: var(--fs-5);
+    line-height: 1.7;
+    color: var(--tinta-media);
+  }
+
+  .bloque__nota {
+    margin-top: 1.5rem;
+    max-width: 78ch;
+    font-size: var(--fs-6);
+    line-height: 1.7;
+    color: var(--tinta-baja);
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--ac-borde);
+  }
+
+  .casos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    margin-top: 2rem;
+  }
+
+  .caso-fig {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    max-width: 58rem;
+  }
+
+  .caso {
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    padding: clamp(1.1rem, 2vw, 1.5rem);
+    display: grid;
+    align-content: start;
+    gap: 0.9rem;
+    transition: border-color var(--d-2) var(--ease-out), transform var(--d-2) var(--ease-out);
+  }
+
+  .caso:hover {
+    border-color: var(--ac);
+    transform: translateY(-3px);
+  }
+
+  .caso__cabeza {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 0.8rem;
+  }
+
+  .caso__marca {
+    grid-row: 1 / span 2;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    filter: grayscale(1) contrast(1.15);
+    opacity: 0.85;
+  }
+
+  .caso__cabeza h4 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .caso__cuando {
+    color: var(--ac);
+  }
+
+  .caso__hecho {
+    font-size: var(--fs-6);
+    line-height: 1.6;
+    color: var(--tinta-media);
+  }
+
+  .caso__matiz {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    font-size: var(--fs-7);
+    line-height: 1.6;
+    color: var(--tinta-baja);
+    padding-top: 0.8rem;
+    border-top: 1px dotted var(--linea);
+  }
+
+  .caso__matiz svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--ac);
+  }
+
+  .controles {
+    margin-top: 2rem;
+    border-top: 2px solid var(--tinta);
+  }
+
+  .controles__encabezado,
+  .control {
+    display: grid;
+    grid-template-columns: 190px 200px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .controles__encabezado {
+    padding: 0.5rem 0.6rem 0.5rem 0;
+    font-size: var(--fs-10);
+  }
+
+  .control {
+    padding: 1.1rem 0.6rem 1.1rem 0;
+    border-top: 1px solid var(--linea);
+    transition: background-color var(--d-2) var(--ease-out), padding-left var(--d-2) var(--ease-out);
+  }
+
+  .control:hover {
+    background: var(--ac-lavanda);
+    padding-left: 0.6rem;
+  }
+
+  .control__nombre {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 700;
+    font-size: var(--fs-5);
+  }
+
+  .control__nombre svg {
+    color: var(--ac);
+    flex: none;
+  }
+
+  .control__ref {
+    line-height: 1.7;
+    color: var(--tinta-baja);
+  }
+
+  .control__dice {
+    font-size: var(--fs-6);
+    line-height: 1.6;
+    color: var(--tinta-media);
+  }
+
+  .peru {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .peru__texto p {
+    font-size: var(--fs-5);
+    line-height: 1.7;
+    color: var(--tinta-media);
+    max-width: 58ch;
+  }
+
+  .peru__fuentes {
+    display: grid;
+    gap: 1px;
+    margin-top: 1.75rem;
+    background: var(--linea);
+    border: 1px solid var(--linea);
+  }
+
+  .peru__fuente {
+    background: var(--papel);
+    padding: 0.9rem 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.9rem;
+    row-gap: 0.2rem;
+    transition: background-color var(--d-2) var(--ease-out);
+  }
+
+  .peru__fuente:hover {
+    background: var(--ac-lavanda);
+  }
+
+  .peru__fuente strong {
+    font-size: var(--fs-6);
+    font-weight: 700;
+  }
+
+  .peru__fuente cite {
+    grid-column: 2;
+    font-style: normal;
+    font-size: var(--fs-7);
+    line-height: 1.5;
+    color: var(--tinta-baja);
+  }
+
+  @media (max-width: 900px) {
+    .metricas {
+      grid-template-columns: 1fr;
+    }
+    .controles__encabezado {
+      display: none;
+    }
+    .control {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+    .peru {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

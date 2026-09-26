@@ -1,0 +1,253 @@
+---
+import { Image } from 'astro:assets';
+import pasillo from '../assets/images/pasillo-ucv.webp';
+import { metricas } from '../data/ensayo';
+
+const cinta = [
+  ...metricas.map((m) => ({ fuerte: `${m.valor}${m.sufijo ?? ''}`, blando: m.que.split('.')[0] })),
+  { fuerte: 'n = 49', blando: 'instituciones encuestadas' },
+  { fuerte: '±11,9 pp', blando: 'margen declarado' },
+  { fuerte: 'cláusula 9.2', blando: 'ISO/IEC 27001' },
+  { fuerte: 'PR.AA-05', blando: 'NIST CSF 2.0' },
+  { fuerte: 'cada 2 años', blando: 'RD 311/2022 art. 31' },
+];
+---
+
+<section class="hero" id="inicio" aria-labelledby="titulo-hero">
+  <div class="hero__foto">
+    <Image
+      src={pasillo}
+      alt="Pasillo soleado de una universidad, con estudiantes caminando hacia el fondo"
+      width={1792}
+      height={1024}
+      loading="eager"
+      fetchpriority="high"
+      format="webp"
+    />
+  </div>
+  <div class="hero__velo" aria-hidden="true"></div>
+
+  <div class="hero__contenido contenedor">
+    <p class="hero__eyebrow mono">
+      Universidad César Vallejo · Ensayo argumentativo
+    </p>
+
+    <h1 id="titulo-hero" class="hero__titulo display" data-reveal>
+      <span class="mascara" style={`--i:0`}><span>La universidad</span></span>
+      <span class="mascara" style={`--i:1`}><span>gestiona datos</span></span>
+      <span class="mascara" style={`--i:2`}>
+        <span>que <em>nadie ve</em><i class="punto">.</i></span>
+      </span>
+    </h1>
+
+    <p class="hero__lead" data-reveal style={`--i:4`}>
+      Matrícula, notas y pagos viven en el mismo perímetro que la biblioteca. Este ensayo reúne lo
+      que la evidencia de 2024 a 2026 dice sobre ese perímetro — y el método que sirve para
+      revisarlo, dicho por quien lo norma.
+    </p>
+
+    <dl class="hero__ficha" data-reveal style={`--i:5`}>
+      <div><dt>Autoría</dt><dd>Antonio Mena · Akim Felipe</dd></div>
+      <div><dt>Curso</dt><dd>Habilidades comunicativas</dd></div>
+      <div><dt>Fuentes</dt><dd>18, con URL y fecha</dd></div>
+      <div><dt>Lectura</dt><dd>≈ 16 minutos</dd></div>
+    </dl>
+  </div>
+
+  <p class="hero__aviso mono">
+    La fotografía es ilustrativa: no muestra la UCV ni ningún sistema real
+  </p>
+
+  <div class="cinta" aria-hidden="true">
+    <div class="cinta__pista">
+      {[0, 1].map(() =>
+        cinta.map((c) => (
+          <span>
+            <b>{c.fuerte}</b> {c.blando} <em>·</em>
+          </span>
+        )),
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 88svh;
+    overflow: hidden;
+    background: var(--papel-bajo);
+  }
+
+  .hero__foto {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__foto :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: respirar 26s ease-in-out infinite alternate;
+    filter: contrast(1.05) saturate(0.92);
+  }
+
+  @keyframes respirar {
+    from {
+      transform: scale(1.02) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.14) translate3d(-2.2%, -1.6%, 0);
+    }
+  }
+
+  .hero__velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(255, 255, 255, 0.86) 34%,
+      rgba(255, 255, 255, 0.25) 62%,
+      rgba(255, 255, 255, 0) 82%
+    );
+  }
+
+  .hero__contenido {
+    position: relative;
+    z-index: 2;
+    align-self: center;
+    padding-block: clamp(5rem, 12vh, 8rem) clamp(3rem, 6vh, 5rem);
+    max-width: 62rem;
+  }
+
+  .hero__eyebrow {
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+    color: var(--tinta-baja);
+  }
+
+  .hero__titulo {
+    font-size: var(--fs-1);
+    max-width: 13ch;
+  }
+
+  .hero__titulo em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .hero__titulo .punto {
+    font-style: normal;
+    color: var(--ac);
+  }
+
+  .hero__lead {
+    margin-top: clamp(1.25rem, 3vw, 1.9rem);
+    max-width: 46ch;
+    font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+    line-height: 1.65;
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+
+  .hero__ficha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.25rem, 3vw, 2.4rem);
+    margin-top: clamp(1.75rem, 4vw, 2.6rem);
+    padding-top: 1rem;
+    border-top: 1px solid rgba(11, 11, 13, 0.18);
+  }
+
+  .hero__ficha div {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .hero__ficha dt {
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+  }
+
+  .hero__ficha dd {
+    font-size: var(--fs-6);
+    color: var(--tinta);
+  }
+
+  .hero__aviso {
+    position: absolute;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: 5.5rem;
+    z-index: 2;
+    max-width: 20ch;
+    text-align: right;
+    color: #fff;
+    background: rgba(11, 11, 13, 0.72);
+    padding: 0.4rem 0.6rem;
+    border-radius: 2px;
+    line-height: 1.6;
+  }
+
+  .cinta {
+    position: relative;
+    z-index: 2;
+    border-block: 1px solid var(--linea);
+    background: var(--papel);
+    overflow: hidden;
+    padding-block: 0.75rem;
+  }
+
+  .cinta__pista {
+    display: flex;
+    width: max-content;
+    gap: 2.4rem;
+    animation: deslizar 42s linear infinite;
+  }
+
+  .cinta__pista span {
+    font-family: var(--mono);
+    font-size: var(--fs-9);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+    white-space: nowrap;
+  }
+
+  .cinta__pista b {
+    color: var(--tinta);
+    font-weight: 500;
+  }
+
+  .cinta__pista em {
+    color: var(--ac);
+    font-style: normal;
+  }
+
+  @keyframes deslizar {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .hero {
+      min-height: auto;
+    }
+    .hero__velo {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.97) 0%,
+        rgba(255, 255, 255, 0.9) 58%,
+        rgba(255, 255, 255, 0.55) 100%
+      );
+    }
+    .hero__aviso {
+      display: none;
+    }
+  }
+</style>

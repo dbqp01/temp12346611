@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import { imagenes, type NombreImagen } from '../data/imagenes';
+
+type Props = {
+  nombre: NombreImagen;
+  alt: string;
+  pie: string;
+  /** Numero de figura tal como se cita en el texto. */
+  fig?: string;
+  /** Ancho renderizado; astro:assets genera los srcset a partir de ahi. */
+  ancho?: number;
+  carga?: 'eager' | 'lazy';
+  clase?: string;
+  /** Efecto visual de entrada. */
+  efecto?: 'sentar' | 'kenburns' | 'ninguno';
+};
+
+const {
+  nombre,
+  alt,
+  pie,
+  fig,
+  ancho = 900,
+  carga = 'lazy',
+  clase,
+  efecto = 'sentar',
+} = Astro.props;
+
+const img = imagenes[nombre];
+if (!img) throw new Error(`Imagen no encontrada: ${nombre}`);
+const src = (img.width / img.height).toFixed(3);
+---
+
+<figure class:list={['fig', efecto !== 'ninguno' && `fig--${efecto}`, clase]} data-fig>
+  <div class="fig__marco">
+    <Image
+      src={img}
+      alt={alt}
+      width={ancho}
+      height={Math.round(ancho / Number(src))}
+      loading={carga}
+      decoding={carga === 'eager' ? 'sync' : 'async'}
+    />
+  </div>
+  <figcaption class="fig__pie">
+    {fig && <span class="fig__n mono mono--ac">Fig. {fig}</span>}
+    <span class="fig__texto">{pie}</span>
+    <span class="fig__aviso mono">imagen ilustrativa generada · no es un sistema real</span>
+  </figcaption>
+</figure>
+
+<style>
+  .fig {
+    margin: 0;
+  }
+
+  .fig__marco {
+    position: relative;
+    overflow: hidden;
+    background: var(--papel-bajo);
+  }
+
+  .fig__marco :global(img) {
+    width: 100%;
+    height: auto;
+    transform: scale(1.08);
+    transition: transform 1.1s var(--ease-out);
+  }
+
+  .fig.revelada .fig__marco :global(img) {
+    transform: scale(1);
+  }
+
+  .fig--kenburns .fig__marco :global(img) {
+    transform: none;
+    animation: respirar 26s ease-in-out infinite alternate;
+  }
+
+  @keyframes respirar {
+    from {
+      transform: scale(1.02) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.14) translate3d(-2.2%, -1.6%, 0);
+    }
+  }
+
+  .fig__pie {
+    display: grid;
+    gap: 0.3rem;
+    padding-top: 0.6rem;
+    margin-top: 0.6rem;
+    border-top: 1px solid var(--linea);
+    font-family: var(--mono);
+    font-size: var(--fs-10);
+    line-height: 1.7;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tinta-apagada);
+  }
+
+  .fig__n {
+    color: var(--ac);
+  }
+
+  .fig__texto {
+    color: var(--tinta-media);
+  }
+
+  .fig__aviso {
+    display: block;
+    color: var(--tinta-apagada);
+    opacity: 0.8;
+  }
+</style>

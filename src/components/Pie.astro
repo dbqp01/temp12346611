@@ -1,0 +1,135 @@
+---
+import ucv from '../assets/marks/ucv.svg?url';
+import Icon from './Icon.astro';
+---
+
+<footer class="pie">
+  <div class="contenedor">
+    <div class="pie__arriba">
+      <p class="display pie__frase">
+        Auditar no es cazar errores.<br />
+        Es <em>dejar por escrito</em> quién entra a qué.
+      </p>
+      <a class="pie__volver" href="#inicio">
+        Volver al inicio <Icon nombre="arrow-up-right" tam={16} />
+      </a>
+    </div>
+
+    <div class="pie__datos">
+      <div>
+        <img class="pie__logo" src={ucv} alt="Universidad César Vallejo" width="130" height="46" />
+        <p>
+          Facultad de Ingeniería y Arquitectura<br />
+          Escuela de Ingeniería de Sistemas
+        </p>
+      </div>
+      <div>
+        <h3 class="mono">Autoría</h3>
+        <p>Antonio Mena · Akim Felipe</p>
+        <p>Habilidades comunicativas · 2026-II</p>
+      </div>
+      <div>
+        <h3 class="mono">Docente</h3>
+        <p>Eshek Tarazona Vega</p>
+      </div>
+      <div>
+        <h3 class="mono">Método del documento</h3>
+        <p>
+          18 fuentes, todas con URL y fecha.<br />
+          Cada cifra se imprime con su base muestral.<br />
+          Última verificación: 25 de septiembre de 2026.
+        </p>
+      </div>
+    </div>
+
+    <p class="pie__legal mono">
+      Trabajo universitario sin fines de lucro. Las marcas de terceros se reproducen solo para
+      identificar a la fuente citada; su aparición no implica aval ni certificación. Las fotografías
+      son ilustrativas y generadas para este documento: no muestran la UCV ni ningún sistema real.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    border-top: 3px solid var(--tinta);
+    padding-block: clamp(3rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3rem);
+    background: var(--papel-bajo);
+  }
+
+  .pie__arriba {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .pie__frase {
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+    max-width: 20ch;
+  }
+
+  .pie__frase em {
+    font-style: italic;
+    color: var(--ac-hondo);
+  }
+
+  .pie__volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: var(--fs-8);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.8rem 1.2rem;
+    border: 1px solid var(--tinta);
+    background: var(--tinta);
+    color: #fff;
+    transition:
+      transform var(--d-2) var(--ease-out),
+      background-color var(--d-2) var(--ease-out);
+  }
+
+  .pie__volver:hover {
+    background: var(--ac);
+    transform: translate(2px, -2px);
+  }
+
+  .pie__datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-block: clamp(2rem, 4vw, 3rem);
+  }
+
+  .pie__datos h3 {
+    margin-bottom: 0.6rem;
+  }
+
+  .pie__datos p {
+    font-size: var(--fs-6);
+    line-height: 1.7;
+    color: var(--tinta-media);
+  }
+
+  .pie__logo {
+    height: 30px;
+    width: auto;
+    margin-bottom: 0.9rem;
+  }
+
+  .pie__legal {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--linea);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: var(--fs-7);
+    line-height: 1.7;
+    max-width: 88ch;
+    color: var(--tinta-baja);
+  }
+</style>
