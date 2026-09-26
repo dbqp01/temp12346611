@@ -41,25 +41,12 @@
   --fs-6: 0.86rem;
   --fs-5: 0.95rem;
   --fs-4: 1rem;
-  --fs-3: 1.25rem;
   --fs-2: clamp(1.7rem, 3.4vw, 2.6rem);
   --fs-1: clamp(2.3rem, 6vw, 5rem);
 
-  /* Ritmo vertical (escala 8) */
-  --sp-1: 0.5rem;
-  --sp-2: 1rem;
-  --sp-3: 1.5rem;
-  --sp-4: 2rem;
-  --sp-5: 3rem;
-  --sp-6: 4.5rem;
-  --sp-7: 6rem;
-  --sp-8: 8rem;
-
   /* Motion */
-  --d-1: 150ms;
   --d-2: 300ms;
   --d-3: 700ms;
-  --d-4: 1100ms;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-line: cubic-bezier(0.16, 0.84, 0.24, 1);
 
@@ -69,7 +56,6 @@
 
   --z-progreso: 90;
   --z-top: 80;
-  --z-sticky: 20;
 }
 
 *,
@@ -322,5 +308,64 @@ button {
 
   .mascara > span {
     transform: none;
+  }
+}
+
+/* Impresion y exportacion a PDF. Un trabajo universitario se imprime: si el
+   revelado dependiera del scroll, el papel saldria casi en blanco. */
+@media print {
+  .topbar,
+  .progreso,
+  .cinta,
+  .scrollcue,
+  .hero__aviso {
+    display: none !important;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .con-js [data-reveal],
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .con-js .mascara > span {
+    transform: none !important;
+  }
+
+  .paso,
+  .paso.armado {
+    opacity: 1 !important;
+  }
+
+  .flujo .arista {
+    stroke-dashoffset: 0 !important;
+  }
+
+  .flujo .etiqueta,
+  .flujo .anillo rect,
+  .flujo .anillo__texto {
+    opacity: 1 !important;
+  }
+
+  .lienzo,
+  .tesis__lado {
+    position: static !important;
+  }
+
+  details {
+    break-inside: avoid;
+  }
+
+  details > .fuente__cuerpo {
+    display: block !important;
+  }
+
+  body {
+    font-size: 11pt;
   }
 }

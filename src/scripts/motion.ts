@@ -53,7 +53,9 @@ function revelar(): void {
         io.unobserve(e.target);
       }
     },
-    { threshold: 0.15, rootMargin: '0px 0px -8% 0px' },
+    // threshold 0: basta un pixel. Con 0.15, un bloque mas alto que seis
+    // pantallas no llega nunca al 15 % y queda invisible para siempre.
+    { threshold: 0, rootMargin: '0px 0px -8% 0px' },
   );
 
   blancos.forEach((el) => io.observe(el));
@@ -187,8 +189,20 @@ function navegacion(): void {
   }
 }
 
+/* --- Impresion: abrir todo lo plegable ---------------------------------- */
+
+function impresion(): void {
+  const abrir = () =>
+    document.querySelectorAll<HTMLDetailsElement>('details').forEach((d) => d.setAttribute('open', ''));
+  addEventListener('beforeprint', abrir);
+  // Safari no implementa beforeprint; matchMedia es el respaldo habitual.
+  const mq = matchMedia('print');
+  if (mq.addEventListener) mq.addEventListener('change', (e) => e.matches && abrir());
+}
+
 progreso();
 revelar();
 contadores();
 scrolly();
 navegacion();
+impresion();
